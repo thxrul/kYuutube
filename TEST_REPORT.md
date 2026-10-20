@@ -59,3 +59,17 @@ These are targeted setup/spike iterations, not three complete application
 bug-hunt passes. Windows/macOS CI compilation must be checked separately and does
 not establish runtime or minimum-OS compatibility. Real playback, failure
 injection, soak, throttle, Wayland, and physical hardware tests remain outstanding.
+
+## Graphics comparisons and native CI
+
+After user approval, the same six actual Tauri UI assertions passed with WebKit's
+Never policy, and again with Never plus its prelaunch compositing switch. Both
+cases retain failing memory measurements in `PERFORMANCE.md`. The comparisons are
+not three complete bug-hunt passes of the full music application.
+
+Baseline workflow run 39500201138 compiled all four platform targets successfully.
+Linux CI executed 2 native integration tests, both passing. All four downloaded
+artifacts passed their own SHA-256 manifests and binary architecture inspection.
+Windows/macOS runtime tests, real audio devices, and minimum-OS compatibility are
+still unrun. The updated Windows measurement helper has a separate CI validation;
+its result must be checked before calling that helper verified on Windows.

@@ -2,6 +2,17 @@ name: Feasibility builds (not a release)
 
 on:
   push:
+    paths:
+      - '.github/workflows/feasibility.yml'
+      - 'Cargo.toml'
+      - 'Cargo.lock'
+      - 'crates/**'
+      - 'src-tauri/**'
+      - 'web/**'
+      - 'tools/package_spike.py'
+      - 'tools/make_sample.py'
+      - 'tools/Measure-ProcessTree.ps1'
+      - 'docs/FEASIBILITY_BUILD.md'
   pull_request:
   workflow_dispatch:
 
@@ -37,6 +48,15 @@ jobs:
         run: |
           rustup toolchain install 1.92.0 --profile minimal
           rustup target add --toolchain 1.92.0 ${{ matrix.target }}
+      - name: Reuse Rust dependencies and build outputs
+        uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            target
+          key: kyuutube-${{ runner.os }}-${{ matrix.target }}-rust-1.92-${{ hashFiles('Cargo.lock') }}
+          restore-keys: kyuutube-${{ runner.os }}-${{ matrix.target }}-rust-1.92-
       - name: Linux build and native-test dependencies
         if: runner.os == 'Linux'
         run: |
@@ -52,6 +72,19 @@ jobs:
         if: runner.os == 'Linux'
         shell: bash
         run: cargo +1.92.0 test --locked -p kyuutube-audio-spike --target ${{ matrix.target }}
+      - name: Validate Windows process-tree measurement helper
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          $child = Start-Process -FilePath (Join-Path $PSHOME 'pwsh.exe') -ArgumentList '-NoProfile -NonInteractive -Command Start-Sleep 30' -PassThru
+          try {
+            $resultPath = Join-Path $env:RUNNER_TEMP 'process-tree-check.json'
+            & .\tools\Measure-ProcessTree.ps1 -RootProcessId $PID -Seconds 5 -OutputPath $resultPath
+            $result = Get-Content -Raw $resultPath | ConvertFrom-Json
+            if ($result.max_process_count -lt 2 -or $result.rss_median_mib -le 0) { throw 'Expected root and child measurements' }
+          } finally {
+            Stop-Process -Id $child.Id -ErrorAction SilentlyContinue
+          }
       - name: Assemble diagnostic artifact (no bundled mpv)
         shell: bash
         run: python3 tools/package_spike.py ${{ matrix.target }}

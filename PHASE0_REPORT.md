@@ -187,6 +187,44 @@ would change the requested web/CSS design implementation and requires a scope
 choice. The official-web-player fallback has not been measured and does not
 remove the webview cost. No performance limit has been relaxed.
 
+## Graphics-policy experiments approved by the user
+
+Two controlled Linux experiments retained Tauri and the original budget. A new
+opt-in diagnostic switch sets WebKit's supported hardware-acceleration policy to
+`Never`; the log confirmed the effective setting. The second also set
+`WEBKIT_DISABLE_COMPOSITING_MODE=1` before process launch, matching WebKit's
+upstream HardwareAccelerationManager implementation. No sandbox, TLS check, or
+assertion was disabled. The default renderer remains unchanged.
+
+| Configuration | Median summed RSS (MiB) | Median PSS (MiB) | CPU (% of one core) |
+| --- | ---: | ---: | ---: |
+| Never policy, direct idle | 421.07 | 228.76 | 0.47 |
+| Never policy, automated local playback | 482.86 | 284.27 | 2.45 |
+| Never + prelaunch switch, direct idle | 405.20 | 215.79 | 0.07 |
+| Never + prelaunch switch, automated local playback | 468.77 | 271.74 | 2.25 |
+
+The same six UI assertions passed in both experiments, and screenshots rendered
+correctly. CPU improved substantially, but memory **still fails** the roughly
+200 MB budget under either RSS or PSS. These remain short Xvfb/virtual-audio
+measurements, not physical GPU, real YouTube, throttled, or soak results. The
+extra prelaunch switch reduced memory further, but did not make the architecture
+a performance pass. No metric or threshold was changed to claim success.
+
+Evidence: `reports/graphics-never-{direct,webdriver}.json`,
+`reports/graphics-prelaunch-{direct,webdriver}.json`, and their screenshots.
+The next useful external evidence is a physical Windows measurement before
+choosing further Linux-specific cuts. A process-tree measurement helper is
+included in the updated diagnostic artifact; it sums WebView2 descendants and
+reports CPU as a percentage of one core. It does not collect command lines or
+credential values.
+
+The baseline GitHub workflow run **39500201138** compiled Windows x64, Linux x64,
+macOS Intel, and macOS Apple Silicon successfully. Downloaded artifacts passed
+SHA-256 validation and had the expected PE, ELF, and Mach-O architectures. The
+Linux CI log confirms two native tests actually executed and passed. Windows and
+macOS jobs were compile-only, and no runtime compatibility or acoustic playback
+is claimed. Updated policy/helper source needs its own CI result.
+
 ## Proposed architecture, conditional on the next spike
 
 **Candidate:** Tauri v2, vanilla TypeScript, a local Material 3 token-based UI,
@@ -270,6 +308,7 @@ Retrieved during this investigation; upstream projects may change:
 - Symphonia codec/features table: https://github.com/pdeljanov/Symphonia
 - CPAL platforms/prerequisites: https://github.com/RustAudio/cpal
 - WebKit acceleration policy: https://github.com/WebKit/WebKit/blob/main/Source/WebKit/UIProcess/API/glib/WebKitSettings.cpp
+- WebKit prelaunch switch: https://github.com/WebKit/WebKit/blob/main/Source/WebKit/UIProcess/gtk/HardwareAccelerationManager.cpp
 
 The rendered ytmusicapi documentation returned HTTP 403; its upstream GitHub
 documentation sources were read instead. The initial raw wiki PO-token URL

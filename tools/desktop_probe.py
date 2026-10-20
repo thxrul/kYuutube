@@ -57,7 +57,8 @@ def measure(process, seconds):
                 previous[child.pid] = total
                 rss += memory.rss
                 pss += getattr(memory, "pss", 0)
-                per_process.append({"pid": child.pid, "name": child.name(), "rss_mib": round(memory.rss / 2**20, 2)})
+                per_process.append({"pid": child.pid, "name": child.name(), "rss_mib": round(memory.rss / 2**20, 2),
+                                    "pss_mib": round(getattr(memory, "pss", 0) / 2**20, 2)})
             except (psutil.NoSuchProcess, psutil.AccessDenied):
                 continue
         if samples:
@@ -81,6 +82,8 @@ def main():
     driver = subprocess.Popen(["tauri-driver"], stdout=log, stderr=log)
     session = None
     report = {"test_kind": "local sample in Tauri/WebKitGTK under Xvfb; no physical audio or YouTube",
+              "requested_graphics_policy": "never" if os.environ.get("KYUUTUBE_SPIKE_SOFTWARE_RENDER") else "default",
+              "prelaunch_compositing_disabled": os.environ.get("WEBKIT_DISABLE_COMPOSITING_MODE") == "1",
               "checks": [], "stages": {}}
     try:
         for _ in range(100):

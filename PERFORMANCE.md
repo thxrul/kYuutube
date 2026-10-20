@@ -57,3 +57,24 @@ size with installed size or treat shared-page RSS sums as unique physical memory
 
 The required two-hour playback chart cannot be produced before real playback
 works; no synthetic or fabricated chart is included.
+
+## Approved graphics-policy comparisons
+
+The original default-renderer measurements above are retained. Neither of these
+opt-in comparisons meets the memory target:
+
+| Linux configuration | Median RSS, MiB | Median PSS, MiB | CPU (% one core) |
+| --- | ---: | ---: | ---: |
+| Never policy: direct idle | 421.07 | 228.76 | 0.47 |
+| Never policy: automated local playback | 482.86 | 284.27 | 2.45 |
+| Never + prelaunch switch: direct idle | 405.20 | 215.79 | 0.07 |
+| Never + prelaunch switch: automated local playback | 468.77 | 271.74 | 2.25 |
+
+Direct idle was measured for 15 seconds, automated idle for 10 seconds, and local
+playback for 15 seconds. The same functional checks passed in each configuration.
+The effective WebKit setting was logged as Never. The prelaunch switch is
+`WEBKIT_DISABLE_COMPOSITING_MODE=1`; the default app behavior is unchanged.
+Screenshots confirm the local UI still renders. No hardware device or network
+playback check follows from these results. CPU passes this short unthrottled
+comparison; memory remains above budget under both metrics. No performance pass
+or completed architecture is declared.

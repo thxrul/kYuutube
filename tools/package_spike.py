@@ -24,11 +24,12 @@ for binary in ["kyuutube-desktop-spike", "kyuutube-audio-spike"]:
 shutil.copy2(root / "tools/fixtures/tone.wav", output)
 shutil.copy2(root / "docs/FEASIBILITY_BUILD.md", output / "README.md")
 shutil.copy2(root / "web/fonts/OFL.txt", output / "ROBOTO_FLEX_LICENSE.txt")
+shutil.copy2(root / "tools/Measure-ProcessTree.ps1", output)
 metadata = {"purpose": "local-audio feasibility diagnostic; no YouTube login or playback",
             "target": target, "source_commit": os.environ.get("GITHUB_SHA", "local"),
             "runtime_validation": "See TEST_REPORT.md; a compile result is not a playback certification",
             "bundled_mpv": False}
 (output / "BUILD_INFO.json").write_text(json.dumps(metadata, indent=2) + "\n")
-names = ["kyuutube-desktop-spike" + suffix, "kyuutube-audio-spike" + suffix, "tone.wav", "README.md", "ROBOTO_FLEX_LICENSE.txt", "BUILD_INFO.json"]
+names = ["kyuutube-desktop-spike" + suffix, "kyuutube-audio-spike" + suffix, "tone.wav", "README.md", "ROBOTO_FLEX_LICENSE.txt", "BUILD_INFO.json", "Measure-ProcessTree.ps1"]
 checksums = [hashlib.sha256((output / name).read_bytes()).hexdigest() + "  " + name for name in names]
 (output / "SHA256SUMS.txt").write_text("\n".join(checksums) + "\n")

@@ -48,3 +48,19 @@ The GitHub diagnostic workflow compiles raw executables for Windows, Linux, and
 both macOS architectures, and runs native tests on Linux. Windows/macOS jobs are
 compile checks, not runtime tests. It does not create a production release or
 bundle libmpv. See [FEASIBILITY_BUILD.md](FEASIBILITY_BUILD.md) for artifact use.
+
+## Opt-in Linux graphics experiments
+
+The default renderer is unchanged. These tested settings improve the virtual
+Linux measurements but still fail the memory target:
+
+```sh
+bash tools/native.sh sh -c 'KYUUTUBE_SPIKE_SOFTWARE_RENDER=1 bash tools/run_desktop_probe.sh desktop-only'
+bash tools/native.sh sh -c 'KYUUTUBE_SPIKE_SOFTWARE_RENDER=1 WEBKIT_DISABLE_COMPOSITING_MODE=1 bash tools/run_desktop_probe.sh desktop-only'
+```
+
+Use `direct` instead of `desktop-only` for idle without WebDriver. The logged
+WebKit policy must say Never; a requested setting alone does not establish it
+was applied. No security verification is disabled by these graphics settings.
+The source references and raw samples are in PHASE0_REPORT.md. The entire
+repeatable installation is `bash tools/setup_native_environment.sh`.

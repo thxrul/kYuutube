@@ -27,6 +27,20 @@ $env:KYUUTUBE_SPIKE_SAMPLE = (Resolve-Path .\tone.wav).Path
 .\kyuutube-desktop-spike.exe
 ```
 
+For a physical Windows measurement, start the visible window, then capture its
+entire process tree (including WebView2 helpers) in a separate PowerShell prompt:
+
+```powershell
+$player = Get-Process -Name kyuutube-desktop-spike
+.\Measure-ProcessTree.ps1 -RootProcessId $player.Id -Seconds 30 -OutputPath .\windows-idle.json
+```
+
+Measure idle and local playback in separate runs. The helper records names,
+working-set RAM and CPU only, never tokens, command lines, or environment values.
+Its RAM metric sums working sets and can double-count shared pages; it is not
+PSS. CPU is a percentage of one core. The program must remain running throughout.
+Run it from your PowerShell development environment.
+
 Linux/macOS shell:
 
 ```sh
@@ -40,6 +54,5 @@ should report an error without crashing. Rendering and local-audio results do no
 establish YouTube support, physical device recovery, minimum OS compatibility,
 or the full process-tree performance budget.
 
-CI artifacts are temporary diagnostics and may be unsigned. Do not disable OS
-security controls to run them. Windows/macOS runtime behavior remains unverified
+CI artifacts are temporary, unsigned diagnostics. Windows/macOS runtime behavior remains unverified
 unless TEST_REPORT.md records an actual test on those platforms.

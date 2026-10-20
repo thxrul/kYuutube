@@ -18,7 +18,10 @@ try:
     time.sleep(8)
     assert process.poll() is None, "Direct-launch window exited during startup"
     result = measure(psutil.Process(process.pid), 15)
-    result.update({"test_kind": "Direct release binary under Xvfb; no WebDriver, no playback", "status": "measured"})
+    result.update({"test_kind": "Direct release binary under Xvfb; no WebDriver, no playback",
+                   "requested_graphics_policy": "never" if environment.get("KYUUTUBE_SPIKE_SOFTWARE_RENDER") else "default",
+                   "prelaunch_compositing_disabled": environment.get("WEBKIT_DISABLE_COMPOSITING_MODE") == "1",
+                   "status": "measured"})
     (root / "reports/local-direct-window.json").write_text(json.dumps(result, indent=2) + "\n")
 finally:
     if process.poll() is None:

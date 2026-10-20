@@ -49,6 +49,30 @@ fn snapshot(audio: State<Audio>) -> Result<Snapshot, String> {
 
 fn main() {
     tauri::Builder::default()
+        .setup(|app| {
+            #[cfg(target_os = "linux")]
+            if std::env::var_os("KYUUTUBE_SPIKE_SOFTWARE_RENDER").is_some() {
+                use tauri::Manager;
+                use webkit2gtk::{SettingsExt, WebViewExt};
+                let window = app
+                    .get_webview_window("main")
+                    .ok_or_else(|| std::io::Error::other("Spike window unavailable"))?;
+                window.with_webview(|view| {
+                    if let Some(settings) = view.inner().settings() {
+                        settings.set_hardware_acceleration_policy(
+                            webkit2gtk::HardwareAccelerationPolicy::Never,
+                        );
+                        eprintln!(
+                            "WebKit graphics policy: {:?}",
+                            settings.hardware_acceleration_policy()
+                        );
+                    }
+                })?;
+            }
+            #[cfg(not(target_os = "linux"))]
+            let _ = app;
+            Ok(())
+        })
         .manage(Audio(Mutex::new(None)))
         .invoke_handler(tauri::generate_handler![
             play_sample,
