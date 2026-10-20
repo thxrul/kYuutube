@@ -223,7 +223,13 @@ macOS Intel, and macOS Apple Silicon successfully. Downloaded artifacts passed
 SHA-256 validation and had the expected PE, ELF, and Mach-O architectures. The
 Linux CI log confirms two native tests actually executed and passed. Windows and
 macOS jobs were compile-only, and no runtime compatibility or acoustic playback
-is claimed. Updated policy/helper source needs its own CI result.
+is claimed. Updated policy/helper source at commit `508ecab` also passed all four builds in
+workflow run **39502246120**. Linux executed two native tests; Windows validated
+the process-tree helper against a real parent/child fixture. All seven manifest
+entries in each of the four updated artifacts passed byte-for-byte SHA-256
+verification, and both executable architectures matched. Helper text matched the
+tested source after Windows newline normalization. See `reports/ci-builds.json`.
+These checks do not certify Windows/macOS application UI or audio behavior.
 
 ## Proposed architecture, conditional on the next spike
 
@@ -265,10 +271,11 @@ GitHub Release only after required tests pass. A successful build alone does not
 certify runtime behavior. Apple signing/notarization and Windows signing need
 separate signing access; unsigned test binaries must be labeled accordingly.
 
-The supplied GitHub integration can read repository metadata and reports push
-permission. Reading Actions permission settings returned HTTP 403 (`Resource not
-accessible by integration`); this alone does not establish that workflow runs or
-artifact access are unavailable. Those specific operations remain untested.
+The existing GitHub authentication successfully pushed source, ran the native
+workflow, read job logs, and downloaded all four baseline platform artifacts.
+Reading Actions administration settings returned HTTP 403 (`Resource not
+accessible by integration`), but that operation is not required for these builds.
+No new GitHub credential or connection was requested.
 
 The user can test Windows. Hosted macOS build/test jobs can provide automation,
 but physical macOS behavior and throttled playback still require an interactive

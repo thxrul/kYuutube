@@ -55,3 +55,14 @@ release or certify runtime behavior on Windows/macOS.
 
 Windows, macOS, and Linux production installers will follow a successful
 spike and architecture sign-off. No production installer or release is claimed now.
+
+## Current diagnostic downloads
+
+[Verified native builds](https://github.com/thxrul/kYuutube/actions/runs/39502246120)
+are available as temporary GitHub Actions artifacts. The
+[Windows x64 diagnostic](https://github.com/thxrul/kYuutube/actions/runs/39502246120/artifacts/12302456246)
+includes a tested process-tree measurement helper. Follow the artifact README for
+idle and local-audio measurements; the mpv runtime is separate. Compilation passed
+on all four targets. Windows/macOS application runtime remains unverified.
+This diagnostic does not sign into or stream YouTube Music. The full release
+remains gated by memory and authenticated-playback feasibility.

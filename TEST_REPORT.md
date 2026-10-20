@@ -73,3 +73,17 @@ artifacts passed their own SHA-256 manifests and binary architecture inspection.
 Windows/macOS runtime tests, real audio devices, and minimum-OS compatibility are
 still unrun. The updated Windows measurement helper has a separate CI validation;
 its result must be checked before calling that helper verified on Windows.
+
+## Verified updated diagnostic artifacts
+
+Workflow **39502246120**, source commit `508ecab`, passed compilation for Linux
+x64, Windows x64, Intel macOS, and Apple Silicon macOS. Linux executed 2 native
+tests, both passing. Windows executed the process-tree helper for five seconds
+against its shell and a real child, requiring positive RAM and at least two
+processes. That validates the helper, not Windows GUI/audio.
+
+All 28 entries across the four artifact SHA-256 manifests verified byte-for-byte.
+Both executables in every artifact had the selected PE, ELF, or Mach-O architecture.
+The helper text matched source after normalizing Windows checkout line endings;
+no artifact or expected checksum was modified. `reports/ci-builds.json` records
+artifact links, digests, and binary sizes. The full client remains incomplete.

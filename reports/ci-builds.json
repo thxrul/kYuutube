@@ -1,0 +1,105 @@
+{
+  "purpose": "Phase 0 local-audio diagnostic; full YouTube Music client incomplete",
+  "source_commit": "508ecab573257b3c63eac9a6398397d039c35d37",
+  "run_url": "https://github.com/thxrul/kYuutube/actions/runs/39502246120",
+  "workflow_result": "success",
+  "linux_native_tests": {
+    "passed": 2,
+    "failed": 0
+  },
+  "windows_measurement_helper": "passed with a real root/child fixture; not application GUI or audio validation",
+  "package_integrity": "All 28 manifest entries verified byte-for-byte. Helper text also matched source after Windows newline normalization.",
+  "google_signin_and_youtube_playback": "not run",
+  "memory_budget": "failed in virtual Linux measurements",
+  "production_release_published": false,
+  "artifacts": [
+    {
+      "target": "aarch64-apple-darwin",
+      "compilation": "passed",
+      "artifact_id": 12302985643,
+      "artifact_url": "https://github.com/thxrul/kYuutube/actions/runs/39502246120/artifacts/12302985643",
+      "manifest_entries_verified": 7,
+      "binaries": [
+        {
+          "name": "kyuutube-desktop-spike",
+          "bytes": 5875216,
+          "sha256": "2299eda7a739f0f4d520cbd4182d99b53dcab31194617c53eacf1782d802c047",
+          "binary_inspection": "Mach-O 64-bit arm64 executable, flags:<NOUNDEFS|DYLDLINK|TWOLEVEL|PIE|HAS_TLV_DESCRIPTORS>"
+        },
+        {
+          "name": "kyuutube-audio-spike",
+          "bytes": 402656,
+          "sha256": "43fe85cddcaf79407aa59bff460a333176ca4230bbc71120305301ca567b1b4b",
+          "binary_inspection": "Mach-O 64-bit arm64 executable, flags:<NOUNDEFS|DYLDLINK|TWOLEVEL|PIE|HAS_TLV_DESCRIPTORS>"
+        }
+      ],
+      "windows_macos_application_runtime": "not tested"
+    },
+    {
+      "target": "x86_64-apple-darwin",
+      "compilation": "passed",
+      "artifact_id": 12302781289,
+      "artifact_url": "https://github.com/thxrul/kYuutube/actions/runs/39502246120/artifacts/12302781289",
+      "manifest_entries_verified": 7,
+      "binaries": [
+        {
+          "name": "kyuutube-desktop-spike",
+          "bytes": 6317928,
+          "sha256": "0cd1cc6292856dafeab8e027bfea23aad5fedcfe0e006782d025c7adfe29e222",
+          "binary_inspection": "Mach-O 64-bit x86_64 executable, flags:<NOUNDEFS|DYLDLINK|TWOLEVEL|PIE|HAS_TLV_DESCRIPTORS>"
+        },
+        {
+          "name": "kyuutube-audio-spike",
+          "bytes": 404000,
+          "sha256": "a0da995c5ae526f4d95d748cfca695f1323985634f1e41324b3b7ee4d039df57",
+          "binary_inspection": "Mach-O 64-bit x86_64 executable, flags:<NOUNDEFS|DYLDLINK|TWOLEVEL|PIE|HAS_TLV_DESCRIPTORS>"
+        }
+      ],
+      "windows_macos_application_runtime": "not tested"
+    },
+    {
+      "target": "x86_64-pc-windows-msvc",
+      "compilation": "passed",
+      "artifact_id": 12302456246,
+      "artifact_url": "https://github.com/thxrul/kYuutube/actions/runs/39502246120/artifacts/12302456246",
+      "manifest_entries_verified": 7,
+      "binaries": [
+        {
+          "name": "kyuutube-desktop-spike.exe",
+          "bytes": 8345600,
+          "sha256": "b2f8f5865872f8011e20de1a0af9a1943137d714309cf032e971f24f40f98857",
+          "binary_inspection": "PE32+ executable for MS Windows 6.00 (GUI), x86-64, 6 sections"
+        },
+        {
+          "name": "kyuutube-audio-spike.exe",
+          "bytes": 229376,
+          "sha256": "968a1ae24879d74532f94bb77ab020e2214f24f67a00d7061ff53bbfee503ef4",
+          "binary_inspection": "PE32+ executable for MS Windows 6.00 (console), x86-64, 5 sections"
+        }
+      ],
+      "windows_macos_application_runtime": "not tested"
+    },
+    {
+      "target": "x86_64-unknown-linux-gnu",
+      "compilation": "passed",
+      "artifact_id": 12302991074,
+      "artifact_url": "https://github.com/thxrul/kYuutube/actions/runs/39502246120/artifacts/12302991074",
+      "manifest_entries_verified": 7,
+      "binaries": [
+        {
+          "name": "kyuutube-desktop-spike",
+          "bytes": 6477144,
+          "sha256": "47f885fd98008647ae87392f8c53ec5d6a3f7894b7438be5ff4f9b9adc547aa9",
+          "binary_inspection": "ELF 64-bit LSB pie executable, x86-64, version 1 (SYSV), dynamically linked, interpreter /lib64/ld-linux-x86-64.so.2, for GNU/Linux 3.2.0, BuildID[sha1]=0bd3a2c183f6b776bb9138e3f31c8a6e7cb9fbb5, stripped"
+        },
+        {
+          "name": "kyuutube-audio-spike",
+          "bytes": 419160,
+          "sha256": "4559ac15e729fe483d8649c254c46576a21877c4c70382072c2b71a3c7cb138e",
+          "binary_inspection": "ELF 64-bit LSB pie executable, x86-64, version 1 (SYSV), dynamically linked, interpreter /lib64/ld-linux-x86-64.so.2, for GNU/Linux 3.2.0, BuildID[sha1]=c047c90a8c7c1005f146bd6c95083ddd96baf235, stripped"
+        }
+      ],
+      "windows_macos_application_runtime": "not applicable; local Linux checks documented separately"
+    }
+  ]
+}
