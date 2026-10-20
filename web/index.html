@@ -1,0 +1,11 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>kYuutube feasibility</title><link rel="stylesheet" href="style.css"><script src="app.js" defer></script></head>
+<body><nav aria-label="Navigation"><a href="#main" aria-current="page">kY</a><span>Phase 0</span></nav><main id="main">
+<header><p class="eyebrow">kYuutube · native playback investigation</p><h1>A little room<br>for listening.</h1><p>A local audio sample, a system webview, and a measurable starting point.</p></header>
+<section class="notice" aria-label="Prototype limitations"><strong>Feasibility build</strong><p>YouTube login and streaming are unverified. This prototype plays only a configured local file. It is not the finished application.</p></section>
+<section class="player" aria-labelledby="track"><div class="art" aria-hidden="true">♪</div><div><p class="eyebrow">Local sample</p><h2 id="track">Native audio, one step at a time.</h2><p id="state" role="status" aria-live="polite">Ready to test</p></div>
+<div class="controls"><button id="play">Play sample</button><button id="pause" disabled>Pause</button></div>
+<label for="seek">Position <output id="elapsed">0:00</output></label><input id="seek" type="range" min="0" max="1" step="0.1" value="0" disabled>
+<label for="volume">Volume</label><input id="volume" type="range" min="0" max="100" value="70" disabled></section>
+<footer>No account connected. No media downloaded. Measurements must include all webview helpers.</footer>
+</main></body></html>

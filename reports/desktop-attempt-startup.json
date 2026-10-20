@@ -1,0 +1,479 @@
+{
+  "test_kind": "local sample in Tauri/WebKitGTK under Xvfb; no physical audio or YouTube",
+  "checks": [
+    "Local UI loaded in the actual Tauri system webview"
+  ],
+  "stages": {
+    "idle": {
+      "duration_seconds": 10,
+      "rss_median_mib": 511.07,
+      "rss_max_mib": 511.64,
+      "pss_median_mib": 310.93,
+      "average_one_core_cpu_percent": 11.66,
+      "samples": [
+        {
+          "monotonic_seconds": 1234.117,
+          "rss_sum_mib": 510.55,
+          "pss_sum_mib": 310.54,
+          "one_core_cpu_percent": null,
+          "processes": [
+            {
+              "pid": 49,
+              "name": "kyuutube-desktop-spike",
+              "rss_mib": 166.34
+            },
+            {
+              "pid": 62,
+              "name": "WebKitNetworkProcess",
+              "rss_mib": 68.25
+            },
+            {
+              "pid": 89,
+              "name": "WebKitWebProcess",
+              "rss_mib": 275.96
+            }
+          ]
+        },
+        {
+          "monotonic_seconds": 1234.622,
+          "rss_sum_mib": 510.56,
+          "pss_sum_mib": 310.55,
+          "one_core_cpu_percent": 114.82684603594066,
+          "processes": [
+            {
+              "pid": 49,
+              "name": "kyuutube-desktop-spike",
+              "rss_mib": 166.34
+            },
+            {
+              "pid": 62,
+              "name": "WebKitNetworkProcess",
+              "rss_mib": 68.25
+            },
+            {
+              "pid": 89,
+              "name": "WebKitWebProcess",
+              "rss_mib": 275.97
+            }
+          ]
+        },
+        {
+          "monotonic_seconds": 1235.129,
+          "rss_sum_mib": 511.17,
+          "pss_sum_mib": 311.04,
+          "one_core_cpu_percent": 104.71639956833998,
+          "processes": [
+            {
+              "pid": 49,
+              "name": "kyuutube-desktop-spike",
+              "rss_mib": 166.42
+            },
+            {
+              "pid": 62,
+              "name": "WebKitNetworkProcess",
+              "rss_mib": 68.32
+            },
+            {
+              "pid": 89,
+              "name": "WebKitWebProcess",
+              "rss_mib": 276.44
+            }
+          ]
+        },
+        {
+          "monotonic_seconds": 1235.634,
+          "rss_sum_mib": 511.07,
+          "pss_sum_mib": 310.93,
+          "one_core_cpu_percent": 1.9779592714968572,
+          "processes": [
+            {
+              "pid": 49,
+              "name": "kyuutube-desktop-spike",
+              "rss_mib": 166.42
+            },
+            {
+              "pid": 62,
+              "name": "WebKitNetworkProcess",
+              "rss_mib": 68.32
+            },
+            {
+              "pid": 89,
+              "name": "WebKitWebProcess",
+              "rss_mib": 276.33
+            }
+          ]
+        },
+        {
+          "monotonic_seconds": 1236.139,
+          "rss_sum_mib": 511.07,
+          "pss_sum_mib": 310.93,
+          "one_core_cpu_percent": 0.0,
+          "processes": [
+            {
+              "pid": 49,
+              "name": "kyuutube-desktop-spike",
+              "rss_mib": 166.42
+            },
+            {
+              "pid": 62,
+              "name": "WebKitNetworkProcess",
+              "rss_mib": 68.32
+            },
+            {
+              "pid": 89,
+              "name": "WebKitWebProcess",
+              "rss_mib": 276.33
+            }
+          ]
+        },
+        {
+          "monotonic_seconds": 1236.644,
+          "rss_sum_mib": 511.07,
+          "pss_sum_mib": 310.93,
+          "one_core_cpu_percent": 0.0,
+          "processes": [
+            {
+              "pid": 49,
+              "name": "kyuutube-desktop-spike",
+              "rss_mib": 166.42
+            },
+            {
+              "pid": 62,
+              "name": "WebKitNetworkProcess",
+              "rss_mib": 68.32
+            },
+            {
+              "pid": 89,
+              "name": "WebKitWebProcess",
+              "rss_mib": 276.33
+            }
+          ]
+        },
+        {
+          "monotonic_seconds": 1237.148,
+          "rss_sum_mib": 511.07,
+          "pss_sum_mib": 310.93,
+          "one_core_cpu_percent": 0.0,
+          "processes": [
+            {
+              "pid": 49,
+              "name": "kyuutube-desktop-spike",
+              "rss_mib": 166.42
+            },
+            {
+              "pid": 62,
+              "name": "WebKitNetworkProcess",
+              "rss_mib": 68.32
+            },
+            {
+              "pid": 89,
+              "name": "WebKitWebProcess",
+              "rss_mib": 276.33
+            }
+          ]
+        },
+        {
+          "monotonic_seconds": 1237.652,
+          "rss_sum_mib": 511.07,
+          "pss_sum_mib": 310.93,
+          "one_core_cpu_percent": 0.0,
+          "processes": [
+            {
+              "pid": 49,
+              "name": "kyuutube-desktop-spike",
+              "rss_mib": 166.42
+            },
+            {
+              "pid": 62,
+              "name": "WebKitNetworkProcess",
+              "rss_mib": 68.32
+            },
+            {
+              "pid": 89,
+              "name": "WebKitWebProcess",
+              "rss_mib": 276.33
+            }
+          ]
+        },
+        {
+          "monotonic_seconds": 1238.158,
+          "rss_sum_mib": 511.07,
+          "pss_sum_mib": 310.93,
+          "one_core_cpu_percent": 0.0,
+          "processes": [
+            {
+              "pid": 49,
+              "name": "kyuutube-desktop-spike",
+              "rss_mib": 166.42
+            },
+            {
+              "pid": 62,
+              "name": "WebKitNetworkProcess",
+              "rss_mib": 68.32
+            },
+            {
+              "pid": 89,
+              "name": "WebKitWebProcess",
+              "rss_mib": 276.33
+            }
+          ]
+        },
+        {
+          "monotonic_seconds": 1238.669,
+          "rss_sum_mib": 511.07,
+          "pss_sum_mib": 310.93,
+          "one_core_cpu_percent": 0.0,
+          "processes": [
+            {
+              "pid": 49,
+              "name": "kyuutube-desktop-spike",
+              "rss_mib": 166.42
+            },
+            {
+              "pid": 62,
+              "name": "WebKitNetworkProcess",
+              "rss_mib": 68.32
+            },
+            {
+              "pid": 89,
+              "name": "WebKitWebProcess",
+              "rss_mib": 276.33
+            }
+          ]
+        },
+        {
+          "monotonic_seconds": 1239.174,
+          "rss_sum_mib": 511.07,
+          "pss_sum_mib": 310.93,
+          "one_core_cpu_percent": 0.0,
+          "processes": [
+            {
+              "pid": 49,
+              "name": "kyuutube-desktop-spike",
+              "rss_mib": 166.42
+            },
+            {
+              "pid": 62,
+              "name": "WebKitNetworkProcess",
+              "rss_mib": 68.32
+            },
+            {
+              "pid": 89,
+              "name": "WebKitWebProcess",
+              "rss_mib": 276.33
+            }
+          ]
+        },
+        {
+          "monotonic_seconds": 1239.678,
+          "rss_sum_mib": 511.07,
+          "pss_sum_mib": 310.93,
+          "one_core_cpu_percent": 0.0,
+          "processes": [
+            {
+              "pid": 49,
+              "name": "kyuutube-desktop-spike",
+              "rss_mib": 166.42
+            },
+            {
+              "pid": 62,
+              "name": "WebKitNetworkProcess",
+              "rss_mib": 68.32
+            },
+            {
+              "pid": 89,
+              "name": "WebKitWebProcess",
+              "rss_mib": 276.33
+            }
+          ]
+        },
+        {
+          "monotonic_seconds": 1240.183,
+          "rss_sum_mib": 511.07,
+          "pss_sum_mib": 310.93,
+          "one_core_cpu_percent": 0.0,
+          "processes": [
+            {
+              "pid": 49,
+              "name": "kyuutube-desktop-spike",
+              "rss_mib": 166.42
+            },
+            {
+              "pid": 62,
+              "name": "WebKitNetworkProcess",
+              "rss_mib": 68.32
+            },
+            {
+              "pid": 89,
+              "name": "WebKitWebProcess",
+              "rss_mib": 276.33
+            }
+          ]
+        },
+        {
+          "monotonic_seconds": 1240.688,
+          "rss_sum_mib": 511.07,
+          "pss_sum_mib": 310.93,
+          "one_core_cpu_percent": 0.0,
+          "processes": [
+            {
+              "pid": 49,
+              "name": "kyuutube-desktop-spike",
+              "rss_mib": 166.42
+            },
+            {
+              "pid": 62,
+              "name": "WebKitNetworkProcess",
+              "rss_mib": 68.32
+            },
+            {
+              "pid": 89,
+              "name": "WebKitWebProcess",
+              "rss_mib": 276.33
+            }
+          ]
+        },
+        {
+          "monotonic_seconds": 1241.193,
+          "rss_sum_mib": 511.19,
+          "pss_sum_mib": 310.94,
+          "one_core_cpu_percent": 0.0,
+          "processes": [
+            {
+              "pid": 49,
+              "name": "kyuutube-desktop-spike",
+              "rss_mib": 166.42
+            },
+            {
+              "pid": 62,
+              "name": "WebKitNetworkProcess",
+              "rss_mib": 68.44
+            },
+            {
+              "pid": 89,
+              "name": "WebKitWebProcess",
+              "rss_mib": 276.33
+            }
+          ]
+        },
+        {
+          "monotonic_seconds": 1241.698,
+          "rss_sum_mib": 511.19,
+          "pss_sum_mib": 310.94,
+          "one_core_cpu_percent": 0.0,
+          "processes": [
+            {
+              "pid": 49,
+              "name": "kyuutube-desktop-spike",
+              "rss_mib": 166.42
+            },
+            {
+              "pid": 62,
+              "name": "WebKitNetworkProcess",
+              "rss_mib": 68.44
+            },
+            {
+              "pid": 89,
+              "name": "WebKitWebProcess",
+              "rss_mib": 276.33
+            }
+          ]
+        },
+        {
+          "monotonic_seconds": 1242.202,
+          "rss_sum_mib": 511.64,
+          "pss_sum_mib": 311.39,
+          "one_core_cpu_percent": 0.0,
+          "processes": [
+            {
+              "pid": 49,
+              "name": "kyuutube-desktop-spike",
+              "rss_mib": 166.42
+            },
+            {
+              "pid": 62,
+              "name": "WebKitNetworkProcess",
+              "rss_mib": 68.44
+            },
+            {
+              "pid": 89,
+              "name": "WebKitWebProcess",
+              "rss_mib": 276.78
+            }
+          ]
+        },
+        {
+          "monotonic_seconds": 1242.706,
+          "rss_sum_mib": 511.56,
+          "pss_sum_mib": 311.31,
+          "one_core_cpu_percent": 0.0,
+          "processes": [
+            {
+              "pid": 49,
+              "name": "kyuutube-desktop-spike",
+              "rss_mib": 166.42
+            },
+            {
+              "pid": 62,
+              "name": "WebKitNetworkProcess",
+              "rss_mib": 68.44
+            },
+            {
+              "pid": 89,
+              "name": "WebKitWebProcess",
+              "rss_mib": 276.7
+            }
+          ]
+        },
+        {
+          "monotonic_seconds": 1243.211,
+          "rss_sum_mib": 511.56,
+          "pss_sum_mib": 311.31,
+          "one_core_cpu_percent": 0.0,
+          "processes": [
+            {
+              "pid": 49,
+              "name": "kyuutube-desktop-spike",
+              "rss_mib": 166.42
+            },
+            {
+              "pid": 62,
+              "name": "WebKitNetworkProcess",
+              "rss_mib": 68.44
+            },
+            {
+              "pid": 89,
+              "name": "WebKitWebProcess",
+              "rss_mib": 276.7
+            }
+          ]
+        },
+        {
+          "monotonic_seconds": 1243.715,
+          "rss_sum_mib": 511.56,
+          "pss_sum_mib": 311.31,
+          "one_core_cpu_percent": 0.0,
+          "processes": [
+            {
+              "pid": 49,
+              "name": "kyuutube-desktop-spike",
+              "rss_mib": 166.42
+            },
+            {
+              "pid": 62,
+              "name": "WebKitNetworkProcess",
+              "rss_mib": 68.44
+            },
+            {
+              "pid": 89,
+              "name": "WebKitWebProcess",
+              "rss_mib": 276.7
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "status": "failed",
+  "error": "{'audio_output': 'system default', 'position_seconds': 0.0011540000000000439, 'duration_seconds': 30, 'paused': False}"
+}

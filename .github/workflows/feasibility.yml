@@ -1,0 +1,63 @@
+name: Feasibility builds (not a release)
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  compile:
+    name: Compile ${{ matrix.target }}
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 40
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-24.04
+            target: x86_64-unknown-linux-gnu
+          - os: windows-2022
+            target: x86_64-pc-windows-msvc
+          - os: macos-14
+            target: aarch64-apple-darwin
+          - os: macos-14
+            target: x86_64-apple-darwin
+    env:
+      CARGO_BUILD_JOBS: 2
+      MACOSX_DEPLOYMENT_TARGET: '12.0'
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - name: Rust toolchain
+        shell: bash
+        run: |
+          rustup toolchain install 1.92.0 --profile minimal
+          rustup target add --toolchain 1.92.0 ${{ matrix.target }}
+      - name: Linux build and native-test dependencies
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends libwebkit2gtk-4.1-dev libssl-dev libayatana-appindicator3-dev librsvg2-dev libxdo-dev libmpv2
+      - name: Generate local test sample
+        shell: bash
+        run: python3 tools/make_sample.py
+      - name: Compile the feasibility executables
+        shell: bash
+        run: cargo +1.92.0 build --release --locked --workspace --target ${{ matrix.target }}
+      - name: Linux native integration tests
+        if: runner.os == 'Linux'
+        shell: bash
+        run: cargo +1.92.0 test --locked -p kyuutube-audio-spike --target ${{ matrix.target }}
+      - name: Assemble diagnostic artifact (no bundled mpv)
+        shell: bash
+        run: python3 tools/package_spike.py ${{ matrix.target }}
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: feasibility-${{ matrix.target }}
+          path: dist/
+          if-no-files-found: error
+          retention-days: 14

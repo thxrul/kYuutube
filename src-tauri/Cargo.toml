@@ -1,0 +1,12 @@
+[package]
+name = "kyuutube-desktop-spike"
+version = "0.0.1"
+edition = "2021"
+publish = false
+
+[build-dependencies]
+tauri-build = { version = "2", features = [] }
+
+[dependencies]
+kyuutube-audio-spike = { path = "../crates/audio-spike" }
+tauri = { version = "2", features = [] }

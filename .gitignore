@@ -1,0 +1,12 @@
+.venv/
+__pycache__/
+*.pyc
+oauth.json
+.env
+.env.*
+!.env.example
+reports/local-*
+/target/
+/dist/
+/tools/fixtures/
+/src-tauri/gen/schemas/

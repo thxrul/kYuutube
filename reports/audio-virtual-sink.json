@@ -1,0 +1,445 @@
+{
+  "duration_seconds": 12,
+  "rss_median_mib": 67.07499999999999,
+  "rss_max_mib": 67.09,
+  "pss_median_mib": 63.4,
+  "average_one_core_cpu_percent": 0.61,
+  "samples": [
+    {
+      "monotonic_seconds": 1211.414,
+      "rss_sum_mib": 67.02,
+      "pss_sum_mib": 63.37,
+      "one_core_cpu_percent": null,
+      "processes": [
+        {
+          "pid": 19,
+          "name": "kyuutube-audio-spike",
+          "rss_mib": 67.02
+        }
+      ]
+    },
+    {
+      "monotonic_seconds": 1211.915,
+      "rss_sum_mib": 67.06,
+      "pss_sum_mib": 63.39,
+      "one_core_cpu_percent": 1.9948451167438783,
+      "processes": [
+        {
+          "pid": 19,
+          "name": "kyuutube-audio-spike",
+          "rss_mib": 67.06
+        }
+      ]
+    },
+    {
+      "monotonic_seconds": 1212.416,
+      "rss_sum_mib": 67.06,
+      "pss_sum_mib": 63.39,
+      "one_core_cpu_percent": 0.0,
+      "processes": [
+        {
+          "pid": 19,
+          "name": "kyuutube-audio-spike",
+          "rss_mib": 67.06
+        }
+      ]
+    },
+    {
+      "monotonic_seconds": 1212.918,
+      "rss_sum_mib": 67.07,
+      "pss_sum_mib": 63.4,
+      "one_core_cpu_percent": 0.0,
+      "processes": [
+        {
+          "pid": 19,
+          "name": "kyuutube-audio-spike",
+          "rss_mib": 67.07
+        }
+      ]
+    },
+    {
+      "monotonic_seconds": 1213.419,
+      "rss_sum_mib": 67.07,
+      "pss_sum_mib": 63.4,
+      "one_core_cpu_percent": 0.0,
+      "processes": [
+        {
+          "pid": 19,
+          "name": "kyuutube-audio-spike",
+          "rss_mib": 67.07
+        }
+      ]
+    },
+    {
+      "monotonic_seconds": 1213.92,
+      "rss_sum_mib": 67.07,
+      "pss_sum_mib": 63.4,
+      "one_core_cpu_percent": 1.9948984263060199,
+      "processes": [
+        {
+          "pid": 19,
+          "name": "kyuutube-audio-spike",
+          "rss_mib": 67.07
+        }
+      ]
+    },
+    {
+      "monotonic_seconds": 1214.421,
+      "rss_sum_mib": 67.07,
+      "pss_sum_mib": 63.4,
+      "one_core_cpu_percent": 0.0,
+      "processes": [
+        {
+          "pid": 19,
+          "name": "kyuutube-audio-spike",
+          "rss_mib": 67.07
+        }
+      ]
+    },
+    {
+      "monotonic_seconds": 1214.923,
+      "rss_sum_mib": 67.07,
+      "pss_sum_mib": 63.4,
+      "one_core_cpu_percent": 0.0,
+      "processes": [
+        {
+          "pid": 19,
+          "name": "kyuutube-audio-spike",
+          "rss_mib": 67.07
+        }
+      ]
+    },
+    {
+      "monotonic_seconds": 1215.424,
+      "rss_sum_mib": 67.07,
+      "pss_sum_mib": 63.4,
+      "one_core_cpu_percent": 0.0,
+      "processes": [
+        {
+          "pid": 19,
+          "name": "kyuutube-audio-spike",
+          "rss_mib": 67.07
+        }
+      ]
+    },
+    {
+      "monotonic_seconds": 1215.925,
+      "rss_sum_mib": 67.07,
+      "pss_sum_mib": 63.4,
+      "one_core_cpu_percent": 1.994998833185237,
+      "processes": [
+        {
+          "pid": 19,
+          "name": "kyuutube-audio-spike",
+          "rss_mib": 67.07
+        }
+      ]
+    },
+    {
+      "monotonic_seconds": 1216.427,
+      "rss_sum_mib": 67.07,
+      "pss_sum_mib": 63.4,
+      "one_core_cpu_percent": 1.9948106994464554,
+      "processes": [
+        {
+          "pid": 19,
+          "name": "kyuutube-audio-spike",
+          "rss_mib": 67.07
+        }
+      ]
+    },
+    {
+      "monotonic_seconds": 1216.928,
+      "rss_sum_mib": 67.07,
+      "pss_sum_mib": 63.4,
+      "one_core_cpu_percent": 0.0,
+      "processes": [
+        {
+          "pid": 19,
+          "name": "kyuutube-audio-spike",
+          "rss_mib": 67.07
+        }
+      ]
+    },
+    {
+      "monotonic_seconds": 1217.429,
+      "rss_sum_mib": 67.08,
+      "pss_sum_mib": 63.4,
+      "one_core_cpu_percent": 0.0,
+      "processes": [
+        {
+          "pid": 19,
+          "name": "kyuutube-audio-spike",
+          "rss_mib": 67.08
+        }
+      ]
+    },
+    {
+      "monotonic_seconds": 1217.93,
+      "rss_sum_mib": 67.08,
+      "pss_sum_mib": 63.4,
+      "one_core_cpu_percent": 0.0,
+      "processes": [
+        {
+          "pid": 19,
+          "name": "kyuutube-audio-spike",
+          "rss_mib": 67.08
+        }
+      ]
+    },
+    {
+      "monotonic_seconds": 1218.432,
+      "rss_sum_mib": 67.08,
+      "pss_sum_mib": 63.4,
+      "one_core_cpu_percent": 0.0,
+      "processes": [
+        {
+          "pid": 19,
+          "name": "kyuutube-audio-spike",
+          "rss_mib": 67.08
+        }
+      ]
+    },
+    {
+      "monotonic_seconds": 1218.933,
+      "rss_sum_mib": 67.08,
+      "pss_sum_mib": 63.41,
+      "one_core_cpu_percent": 1.9949233310771457,
+      "processes": [
+        {
+          "pid": 19,
+          "name": "kyuutube-audio-spike",
+          "rss_mib": 67.08
+        }
+      ]
+    },
+    {
+      "monotonic_seconds": 1219.434,
+      "rss_sum_mib": 67.08,
+      "pss_sum_mib": 63.41,
+      "one_core_cpu_percent": 0.0,
+      "processes": [
+        {
+          "pid": 19,
+          "name": "kyuutube-audio-spike",
+          "rss_mib": 67.08
+        }
+      ]
+    },
+    {
+      "monotonic_seconds": 1219.935,
+      "rss_sum_mib": 67.08,
+      "pss_sum_mib": 63.41,
+      "one_core_cpu_percent": 0.0,
+      "processes": [
+        {
+          "pid": 19,
+          "name": "kyuutube-audio-spike",
+          "rss_mib": 67.08
+        }
+      ]
+    },
+    {
+      "monotonic_seconds": 1220.437,
+      "rss_sum_mib": 67.08,
+      "pss_sum_mib": 63.41,
+      "one_core_cpu_percent": 1.9948410975517492,
+      "processes": [
+        {
+          "pid": 19,
+          "name": "kyuutube-audio-spike",
+          "rss_mib": 67.08
+        }
+      ]
+    },
+    {
+      "monotonic_seconds": 1220.938,
+      "rss_sum_mib": 67.08,
+      "pss_sum_mib": 63.41,
+      "one_core_cpu_percent": 0.0,
+      "processes": [
+        {
+          "pid": 19,
+          "name": "kyuutube-audio-spike",
+          "rss_mib": 67.08
+        }
+      ]
+    },
+    {
+      "monotonic_seconds": 1221.439,
+      "rss_sum_mib": 67.09,
+      "pss_sum_mib": 63.41,
+      "one_core_cpu_percent": 0.0,
+      "processes": [
+        {
+          "pid": 19,
+          "name": "kyuutube-audio-spike",
+          "rss_mib": 67.09
+        }
+      ]
+    },
+    {
+      "monotonic_seconds": 1221.941,
+      "rss_sum_mib": 67.09,
+      "pss_sum_mib": 63.41,
+      "one_core_cpu_percent": 0.0,
+      "processes": [
+        {
+          "pid": 19,
+          "name": "kyuutube-audio-spike",
+          "rss_mib": 67.09
+        }
+      ]
+    },
+    {
+      "monotonic_seconds": 1222.442,
+      "rss_sum_mib": 67.09,
+      "pss_sum_mib": 63.41,
+      "one_core_cpu_percent": 1.9950319037229614,
+      "processes": [
+        {
+          "pid": 19,
+          "name": "kyuutube-audio-spike",
+          "rss_mib": 67.09
+        }
+      ]
+    },
+    {
+      "monotonic_seconds": 1222.943,
+      "rss_sum_mib": 67.09,
+      "pss_sum_mib": 63.41,
+      "one_core_cpu_percent": 0.0,
+      "processes": [
+        {
+          "pid": 19,
+          "name": "kyuutube-audio-spike",
+          "rss_mib": 67.09
+        }
+      ]
+    }
+  ],
+  "status": "passed",
+  "test_kind": "Generated local WAV through libmpv and PulseAudio null sink; no physical sound or YouTube",
+  "timeline_samples": [
+    {
+      "position_seconds": 0.10000000000000003,
+      "duration_seconds": 30.0,
+      "paused": false,
+      "audio_output": "system default"
+    },
+    {
+      "position_seconds": 0.0013530000000000486,
+      "duration_seconds": 30.0,
+      "paused": false,
+      "audio_output": "system default"
+    },
+    {
+      "position_seconds": 1.022178166666666,
+      "duration_seconds": 30.0,
+      "paused": false,
+      "audio_output": "system default"
+    },
+    {
+      "position_seconds": 1.993314333333334,
+      "duration_seconds": 30.0,
+      "paused": false,
+      "audio_output": "system default"
+    },
+    {
+      "position_seconds": 3.005365666666672,
+      "duration_seconds": 30.0,
+      "paused": false,
+      "audio_output": "system default"
+    },
+    {
+      "position_seconds": 4.026569833333339,
+      "duration_seconds": 30.0,
+      "paused": false,
+      "audio_output": "system default"
+    },
+    {
+      "position_seconds": 4.988314166666666,
+      "duration_seconds": 30.0,
+      "paused": false,
+      "audio_output": "system default"
+    },
+    {
+      "position_seconds": 6.01034166666666,
+      "duration_seconds": 30.0,
+      "paused": false,
+      "audio_output": "system default"
+    },
+    {
+      "position_seconds": 7.031974999999987,
+      "duration_seconds": 30.0,
+      "paused": false,
+      "audio_output": "system default"
+    },
+    {
+      "position_seconds": 8.033559833333323,
+      "duration_seconds": 30.0,
+      "paused": false,
+      "audio_output": "system default"
+    },
+    {
+      "position_seconds": 9.015098166666672,
+      "duration_seconds": 30.0,
+      "paused": false,
+      "audio_output": "system default"
+    },
+    {
+      "position_seconds": 9.976835833333352,
+      "duration_seconds": 30.0,
+      "paused": false,
+      "audio_output": "system default"
+    },
+    {
+      "position_seconds": 10.998864500000034,
+      "duration_seconds": 30.0,
+      "paused": false,
+      "audio_output": "system default"
+    },
+    {
+      "position_seconds": 12.021206333333382,
+      "duration_seconds": 30.0,
+      "paused": false,
+      "audio_output": "system default"
+    },
+    {
+      "position_seconds": 12.983237333333395,
+      "duration_seconds": 30.0,
+      "paused": false,
+      "audio_output": "system default"
+    },
+    {
+      "position_seconds": 14.01471383333341,
+      "duration_seconds": 30.0,
+      "paused": false,
+      "audio_output": "system default"
+    },
+    {
+      "position_seconds": 15.02650966666676,
+      "duration_seconds": 30.0,
+      "paused": false,
+      "audio_output": "system default"
+    },
+    {
+      "position_seconds": 15.98820150000009,
+      "duration_seconds": 30.0,
+      "paused": false,
+      "audio_output": "system default"
+    },
+    {
+      "position_seconds": 17.019938833333395,
+      "duration_seconds": 30.0,
+      "paused": false,
+      "audio_output": "system default"
+    },
+    {
+      "position_seconds": 18.032187500000035,
+      "duration_seconds": 30.0,
+      "paused": false,
+      "audio_output": "system default"
+    }
+  ]
+}

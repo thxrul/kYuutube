@@ -1,0 +1,43 @@
+{
+  "environment": {
+    "os": "Linux",
+    "architecture": "x86_64",
+    "python": "3.12.14",
+    "packages": {
+      "ytmusicapi": "1.12.3",
+      "yt-dlp": "2026.8.19",
+      "psutil": "7.2.2"
+    }
+  },
+  "measurement": "50ms RSS sampling, summed process-tree CPU time; short anonymous Python probes only",
+  "authenticated_login": "not_run_missing_client_and_interactive_authorization",
+  "audio_playback": "not_run",
+  "probes": [
+    {
+      "probe": "search",
+      "exit_code": 1,
+      "timed_out": false,
+      "wall_seconds": 0.202,
+      "sampled_peak_rss_mib": 23.54,
+      "sampled_cpu_seconds": 0.13,
+      "sampled_average_one_core_cpu_percent": 64.22,
+      "result": {
+        "status": "failed",
+        "error_type": "ProxyError"
+      }
+    },
+    {
+      "probe": "stream_resolution",
+      "exit_code": 1,
+      "timed_out": false,
+      "wall_seconds": 0.303,
+      "sampled_peak_rss_mib": 39.19,
+      "sampled_cpu_seconds": 0.24,
+      "sampled_average_one_core_cpu_percent": 79.22,
+      "result": {
+        "status": "failed",
+        "error_type": "DownloadError"
+      }
+    }
+  ]
+}
