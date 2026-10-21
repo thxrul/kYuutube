@@ -141,3 +141,59 @@ The publication workflow downloaded all public release assets and verified the
 four archive SHA-256 hashes. See `reports/account-ci-builds.json`. Full Music
 login/playback, offline downloads, final audits, and production release gates
 remain outstanding.
+
+
+## Streamlined account and experimental native Music iteration
+
+The user requested a download-and-open product and explicitly required working
+native Music playback before any further publication. The main UI now has a
+single browser sign-in action and no user client-ID/secret or Cloud setup fields.
+The publisher registration is supplied at build time. The old configuration IPC
+was removed. Newly received credentials are saved only after Music account
+verification, and a cancelled/failed attempt preserves an existing working grant.
+
+The native source now implements Music account-menu verification, bounded Music
+search, direct expiring audio lease resolution, and native player controls. Only
+the fixed Music origin is used for provider requests; there are no alternate
+clients, cookie imports, cipher transformations, or PO-token workarounds. The
+resolver refuses unplayable, ad-requiring, cipher-only, and protected responses.
+These checks do not establish compliant live free-account or Premium behavior.
+
+Executed local checks:
+
+- **29 account/Music tests passed.** These use fictitious credentials, mocked
+  provider responses, and real local callback/HTTP parsing tests. They include
+  Music-versus-Google account verification, refresh retry, publisher/client
+  binding, transaction/cancellation, bounded search, playability/ad/DRM rejection,
+  and direct-lease selection. They are not Google service tests.
+- **4 native audio integration tests passed.** A generated WAV was also served
+  from a loopback HTTP fixture; the real libmpv decoder advanced, paused, sought,
+  and stopped. Signed lease validation rejected arbitrary hosts, insecure URLs,
+  credentials in URLs, invalid ports, duplicate expiry, and expired input.
+  The fixture does not contact YouTube or establish real Music playback.
+- **14 frontend state tests passed** for browser sign-in, cancellation,
+  restoration, sign-out, bounded search, stale-result/startup races, hidden-window
+  polling, and required-ad errors.
+- **3 publication gate tests passed.** OAuth configuration alone cannot publish
+  a build whose native Music playback is unverified.
+- **10 real Tauri/WebKitGTK checks passed**, including the new welcome, rejected
+  old credential IPC, compact/wide layouts, About/diagnostics separation, and
+  local play/pause/seek/volume. Source: `reports/streamlined-desktop.json`.
+  Actual X11 captures: `reports/streamlined-welcome.png` and
+  `reports/streamlined-audio.png`.
+- Clippy passed with warnings as errors. A complete fictitious publisher
+  registration compiled; a partial registration failed without exposing values.
+  No browser login was attempted by those build tests.
+
+The first WebKit WebDriver screenshot attempts timed out; that failed run remains
+in `reports/streamlining-capture-failure.json`. Native GDK capture of the actual
+X11 window replaced the stalled screenshot endpoint. The actual rendered welcome
+was inspected, and the functional UI assertions passed. This was a test-capture
+issue, not a live Music playback pass.
+
+The latest origin check at **2026-10-21 09:01:06 UTC** still failed at proxy
+CONNECT with **HTTP 403** (curl exit 56), before any provider API response.
+Live browser consent, Music OAuth compatibility, real stream playback, ads and
+entitlements, physical audio/device recovery, native runtime bundling, soak,
+platform/throttle suites, and full Metrolist parity remain unverified or unfinished.
+No new release was published. See `reports/native-music-status.json`.

@@ -1,6 +1,8 @@
-//! System-browser desktop OAuth diagnostic. This does not authenticate InnerTube
-//! or resolve YouTube Music audio streams. Secrets never cross back into the UI.
+//! System-browser OAuth and an experimental authenticated Music service adapter.
+//! Live service compatibility is unverified. Tokens and leases never enter the UI.
+mod music;
 use base64::{engine::general_purpose::URL_SAFE_NO_PAD, Engine};
+pub use music::{MusicStream, MusicTrack};
 use reqwest::blocking::{Client, Response};
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
@@ -90,9 +92,8 @@ struct AccessToken {
 }
 #[derive(Serialize)]
 pub struct AccountStatus {
-    pub configured: bool,
-    pub connected: bool,
-    pub service: &'static str,
+    pub available: bool,
+    pub has_session: bool,
 }
 #[derive(Serialize, Deserialize)]
 pub struct Channel {
@@ -116,6 +117,7 @@ pub struct Page {
 trait Transport: Send + Sync {
     fn form(&self, endpoint: &str, fields: &[(&str, &str)]) -> Result<Value, String>;
     fn get(&self, resource: &str, token: &str, query: &[(&str, &str)]) -> Result<Value, String>;
+    fn music(&self, endpoint: &str, token: &str, body: &Value) -> Result<Value, String>;
 }
 struct GoogleHttp(Client);
 fn response_json(response: Response) -> Result<Value, String> {
@@ -184,6 +186,21 @@ impl Transport for GoogleHttp {
                 .query(query)
                 .send()
                 .map_err(|_| "Could not reach YouTube; check your connection")?,
+        )
+    }
+    fn music(&self, endpoint: &str, token: &str, body: &Value) -> Result<Value, String> {
+        if !matches!(endpoint, "account/account_menu" | "search" | "player") {
+            return Err("Unsupported Music endpoint".into());
+        }
+        response_json(
+            self.0
+                .post(format!("https://music.youtube.com/youtubei/v1/{endpoint}"))
+                .bearer_auth(token)
+                .header("Origin", "https://music.youtube.com")
+                .header("User-Agent", "kYuutube/0.0.1")
+                .json(body)
+                .send()
+                .map_err(|_| "Could not reach YouTube Music; check your connection")?,
         )
     }
 }
@@ -259,9 +276,9 @@ impl Attempt {
                         validate_callback(&request, &self.redirect, &self.state)
                     });
                     let text = if result.is_ok() {
-                        "Authorization received. Return to kYuutube to finish connecting."
+                        "Finishing sign-in. You can return to kYuutube."
                     } else {
-                        "Invalid or declined authorization. Return to kYuutube or retry sign-in."
+                        "Sign-in was not completed. Return to kYuutube to try again."
                     };
                     let status = if result.is_ok() {
                         "200 OK"
@@ -374,6 +391,7 @@ fn constant_time_equal(a: &str, b: &str) -> bool {
 }
 
 pub struct Account {
+    app_client: Option<ClientConfig>,
     store: Box<dyn SecretStore>,
     http: Box<dyn Transport>,
     operation: Mutex<()>,
@@ -381,11 +399,23 @@ pub struct Account {
     cancelled: AtomicBool,
 }
 impl Account {
-    pub fn new() -> Result<Self, String> {
-        Ok(Self::with(Box::new(OsStore), Box::new(GoogleHttp::new()?)))
+    pub fn new(app_client: Option<ClientConfig>) -> Result<Self, String> {
+        if let Some(config) = &app_client {
+            config.validate()?;
+        }
+        Ok(Self::with(
+            app_client,
+            Box::new(OsStore),
+            Box::new(GoogleHttp::new()?),
+        ))
     }
-    fn with(store: Box<dyn SecretStore>, http: Box<dyn Transport>) -> Self {
+    fn with(
+        app_client: Option<ClientConfig>,
+        store: Box<dyn SecretStore>,
+        http: Box<dyn Transport>,
+    ) -> Self {
         Self {
+            app_client,
             store,
             http,
             operation: Mutex::new(()),
@@ -394,52 +424,71 @@ impl Account {
         }
     }
     pub fn status(&self) -> Result<AccountStatus, String> {
+        // A publisher registration is supplied by the build, never by the user.
+        // Old alpha credentials cannot silently enable an unprovisioned build.
+        let Some(config) = &self.app_client else {
+            return Ok(AccountStatus {
+                available: false,
+                has_session: false,
+            });
+        };
+        let matches = self.saved_client_matches(config)?;
         Ok(AccountStatus {
-            configured: self.store.read("client")?.is_some(),
-            connected: self.store.read("refresh")?.is_some(),
-            service: "YouTube Data API (not a YouTube Music browser session)",
+            available: true,
+            has_session: matches && self.store.read("refresh")?.is_some(),
         })
     }
-    pub fn configure(&self, config: ClientConfig) -> Result<(), String> {
-        let _operation = self
-            .operation
-            .try_lock()
-            .map_err(|_| "Finish or cancel the current account operation first")?;
+    fn saved_client_matches(&self, config: &ClientConfig) -> Result<bool, String> {
+        let Some(value) = self.store.read("client")? else {
+            return Ok(false);
+        };
+        Ok(serde_json::from_str::<ClientConfig>(&value)
+            .is_ok_and(|saved| saved.client_id == config.client_id))
+    }
+    fn publisher_client(&self) -> Result<&ClientConfig, String> {
+        let config = self
+            .app_client
+            .as_ref()
+            .ok_or("Sign-in is not available in this build")?;
         config.validate()?;
-        // Remove the old grant before switching clients. Never reuse it with a different client.
-        self.store.delete("refresh")?;
-        *self
-            .access
-            .lock()
-            .map_err(|_| "Account state unavailable")? = None;
+        Ok(config)
+    }
+    fn prepare_client(&self) -> Result<(), String> {
+        let config = self.publisher_client()?;
+        // A cancelled retry must preserve the current grant. A changed publisher
+        // registration must never reuse another client's refresh credential.
+        if !self.saved_client_matches(config)? {
+            self.store.delete("refresh")?;
+            *self
+                .access
+                .lock()
+                .map_err(|_| "Account state unavailable")? = None;
+        }
         let value = Zeroizing::new(
-            serde_json::to_string(&config).map_err(|_| "Invalid client configuration")?,
+            serde_json::to_string(config).map_err(|_| "Invalid client configuration")?,
         );
         self.store.write("client", &value)?;
-        // Read back from the secure store to detect an unusable backend before opening a browser.
         if self.store.read("client")?.as_deref().map(|v| v.as_str()) != Some(value.as_str()) {
             return Err("OS credential store could not verify the saved client".into());
         }
         Ok(())
     }
-    fn config(&self) -> Result<ClientConfig, String> {
-        let value = self
-            .store
-            .read("client")?
-            .ok_or("Configure a Google Desktop app client first")?;
-        let config: ClientConfig =
-            serde_json::from_str(&value).map_err(|_| "Saved client configuration is invalid")?;
-        config.validate()?;
+    fn config(&self) -> Result<&ClientConfig, String> {
+        let config = self.publisher_client()?;
+        if !self.saved_client_matches(config)? {
+            return Err("Sign in with Google first".into());
+        }
         Ok(config)
     }
-    pub fn sign_in(&self) -> Result<Channel, String> {
+    pub fn sign_in(&self) -> Result<(), String> {
         let _operation = self
             .operation
             .try_lock()
             .map_err(|_| "An account operation is already running")?;
         self.cancelled.store(false, Ordering::SeqCst);
+        self.prepare_client()?;
         let config = self.config()?;
-        let attempt = Attempt::new(&config)?;
+        let attempt = Attempt::new(config)?;
         webbrowser::open(attempt.authorize.as_str())
             .map_err(|_| "Could not open the system browser")?;
         let code = attempt.wait(&self.cancelled, Duration::from_secs(300))?;
@@ -457,19 +506,27 @@ impl Account {
         if self.cancelled.load(Ordering::SeqCst) {
             return Err("Sign-in cancelled".into());
         }
-        self.accept_token(response, true)?;
-        self.channel_inner()
+        self.finish_sign_in(response)
+    }
+    pub fn restore_session(&self) -> Result<(), String> {
+        let _operation = self
+            .operation
+            .try_lock()
+            .map_err(|_| "An account operation is already running")?;
+        // Saved credentials are not proof of a valid session. On restart, verify
+        // the refresh grant with Google before showing the user as signed in.
+        self.verify_music_account().map(|_| ())
     }
     pub fn cancel(&self) {
         self.cancelled.store(true, Ordering::SeqCst);
     }
-    fn accept_token(&self, value: Value, require_refresh: bool) -> Result<(), String> {
+    fn decode_token(value: Value, require_refresh: bool) -> Result<TokenResponse, String> {
         let response: TokenResponse =
             serde_json::from_value(value).map_err(|_| "Invalid Google token response")?;
         if !response.token_type.eq_ignore_ascii_case("bearer")
             || response.access_token.is_empty()
             || response.access_token.len() > 16384
-            || response.expires_in == 0
+            || response.expires_in <= 60
             || response.expires_in > 86400
             || response
                 .scope
@@ -478,26 +535,51 @@ impl Account {
         {
             return Err("Google did not grant the required YouTube read permission".into());
         }
+        let refresh = response
+            .refresh_token
+            .as_ref()
+            .filter(|value| !value.is_empty());
+        if refresh.is_some_and(|value| value.len() > 2048) {
+            return Err("Google refresh credential exceeded secure storage limit".into());
+        }
+        if require_refresh && refresh.is_none() {
+            return Err("Google did not provide offline authorization; sign in again".into());
+        }
+        Ok(response)
+    }
+    fn save_token(&self, response: &TokenResponse) -> Result<(), String> {
         if let Some(refresh) = response
             .refresh_token
             .as_ref()
             .filter(|value| !value.is_empty())
         {
-            if refresh.len() > 2048 {
-                return Err("Google refresh credential exceeded secure storage limit".into());
-            }
             self.store.write("refresh", refresh)?;
-        } else if require_refresh {
-            return Err("Google did not provide offline authorization; sign in again".into());
         }
         *self
             .access
             .lock()
             .map_err(|_| "Account state unavailable")? = Some(AccessToken {
             value: Zeroizing::new(response.access_token.clone()),
-            expires: Instant::now() + Duration::from_secs(response.expires_in.saturating_sub(60)),
+            expires: Instant::now() + Duration::from_secs(response.expires_in - 60),
         });
         Ok(())
+    }
+    fn accept_token(&self, value: Value, require_refresh: bool) -> Result<(), String> {
+        self.save_token(&Self::decode_token(value, require_refresh)?)
+    }
+    fn finish_sign_in(&self, value: Value) -> Result<(), String> {
+        let response = Self::decode_token(value, true)?;
+        if self.cancelled.load(Ordering::SeqCst) {
+            return Err("Sign-in cancelled".into());
+        }
+        // Verify this new grant explicitly. Never let an older saved refresh
+        // credential turn a failed new Music login into apparent success.
+        let verified = self.verify_music_with_token(&response.access_token);
+        if self.cancelled.load(Ordering::SeqCst) {
+            return Err("Sign-in cancelled".into());
+        }
+        verified?;
+        self.save_token(&response)
     }
     fn token(&self) -> Result<Zeroizing<String>, String> {
         if let Some(token) = self
@@ -706,6 +788,14 @@ mod tests {
                 .pop_front()
                 .expect("Unexpected GET")
         }
+        fn music(&self, endpoint: &str, _: &str, _: &Value) -> Result<Value, String> {
+            self.calls.lock().unwrap().push(format!("music:{endpoint}"));
+            self.gets
+                .lock()
+                .unwrap()
+                .pop_front()
+                .expect("Unexpected Music POST")
+        }
     }
     fn config() -> ClientConfig {
         ClientConfig {
@@ -716,8 +806,12 @@ mod tests {
     fn fixture() -> (Account, Arc<MemoryStore>, Arc<FakeHttp>) {
         let store = Arc::new(MemoryStore::default());
         let http = Arc::new(FakeHttp::default());
-        let account = Account::with(Box::new(store.clone()), Box::new(http.clone()));
-        account.configure(config()).unwrap();
+        let account = Account::with(
+            Some(config()),
+            Box::new(store.clone()),
+            Box::new(http.clone()),
+        );
+        account.prepare_client().unwrap();
         (account, store, http)
     }
     fn token(refresh: bool) -> Value {
@@ -830,7 +924,7 @@ mod tests {
         http.forms.lock().unwrap().push_back(Ok(token(false)));
         assert_eq!(&*account.token().unwrap(), "fake-access");
         assert_eq!(&*http.calls.lock().unwrap(), &["token"]);
-        assert!(account.status().unwrap().connected);
+        assert!(account.status().unwrap().has_session);
     }
     #[test]
     fn revoked_refresh_clears_session_but_transient_network_error_preserves_it() {
@@ -864,7 +958,17 @@ mod tests {
     fn changing_client_clears_old_grant_and_credentials_are_not_returned_to_ui() {
         let (account, store, _) = fixture();
         account.accept_token(token(true), true).unwrap();
-        account.configure(config()).unwrap();
+        let changed = ClientConfig {
+            client_id: "another.apps.googleusercontent.com".into(),
+            client_secret: "another-secret".into(),
+        };
+        let account = Account::with(
+            Some(changed),
+            Box::new(store.clone()),
+            Box::new(Arc::new(FakeHttp::default())),
+        );
+        assert!(!account.status().unwrap().has_session);
+        account.prepare_client().unwrap();
         assert!(store.read("refresh").unwrap().is_none());
         assert!(account.access.lock().unwrap().is_none());
         let public = serde_json::to_string(&account.status().unwrap()).unwrap();
@@ -880,6 +984,8 @@ mod tests {
             .unwrap_err()
             .contains("Local credentials removed"));
         assert!(store.0.lock().unwrap().is_empty());
+        assert!(account.status().unwrap().available);
+        assert!(!account.status().unwrap().has_session);
         assert!(account.access.lock().unwrap().is_none());
     }
     #[test]
@@ -929,8 +1035,12 @@ mod tests {
             }
         }
         let http = Arc::new(FakeHttp::default());
-        let account = Account::with(Box::new(LockedStore), Box::new(http.clone()));
-        assert!(account.configure(config()).is_err());
+        let account = Account::with(
+            Some(config()),
+            Box::new(LockedStore),
+            Box::new(http.clone()),
+        );
+        assert!(account.prepare_client().is_err());
         assert!(account.sign_in().is_err());
         assert!(http.calls.lock().unwrap().is_empty());
     }
@@ -978,10 +1088,180 @@ mod tests {
         );
     }
     #[test]
+    fn missing_publisher_registration_never_uses_old_user_configuration() {
+        let (_, store, http) = fixture();
+        store.write("refresh", "old-alpha-grant").unwrap();
+        let account = Account::with(None, Box::new(store), Box::new(http.clone()));
+        let status = account.status().unwrap();
+        assert!(!status.available && !status.has_session);
+        assert!(account.sign_in().unwrap_err().contains("this build"));
+        assert!(account.token().is_err());
+        assert!(http.calls.lock().unwrap().is_empty());
+    }
+    #[test]
+    fn repeated_sign_in_setup_preserves_a_grant_for_the_same_publisher() {
+        let (account, store, _) = fixture();
+        account.accept_token(token(true), true).unwrap();
+        account.prepare_client().unwrap();
+        assert_eq!(&**store.read("refresh").unwrap().unwrap(), "fake-refresh");
+        assert!(account.status().unwrap().has_session);
+        assert!(account.access.lock().unwrap().is_some());
+    }
+    #[test]
+    fn restoring_a_saved_session_verifies_google_before_reusing_it() {
+        let (account, store, http) = fixture();
+        store.write("refresh", "saved-grant").unwrap();
+        http.forms.lock().unwrap().push_back(Ok(token(false)));
+        for _ in 0..2 {
+            http.gets
+                .lock()
+                .unwrap()
+                .push_back(Ok(music::tests::account_response()));
+        }
+        account.restore_session().unwrap();
+        assert_eq!(
+            &*http.calls.lock().unwrap(),
+            &["token", "music:account/account_menu"]
+        );
+        account.restore_session().unwrap();
+        assert_eq!(
+            &*http.calls.lock().unwrap(),
+            &[
+                "token",
+                "music:account/account_menu",
+                "music:account/account_menu"
+            ]
+        );
+    }
+    #[test]
+    fn another_publishers_grant_is_never_refreshed() {
+        let (_, store, http) = fixture();
+        store.write("refresh", "other-grant").unwrap();
+        let changed = ClientConfig {
+            client_id: "other.apps.googleusercontent.com".into(),
+            client_secret: "other-secret".into(),
+        };
+        let account = Account::with(Some(changed), Box::new(store), Box::new(http.clone()));
+        assert!(!account.status().unwrap().has_session);
+        assert!(account.restore_session().is_err());
+        assert!(http.calls.lock().unwrap().is_empty());
+    }
+    #[test]
+    fn google_authorization_alone_does_not_verify_music_login() {
+        let (account, store, http) = fixture();
+        store.write("refresh", "saved-grant").unwrap();
+        http.forms.lock().unwrap().push_back(Ok(token(false)));
+        http.gets
+            .lock()
+            .unwrap()
+            .push_back(Ok(serde_json::json!({"actions":[]})));
+        assert!(account.restore_session().is_err());
+    }
+    #[test]
+    fn music_search_and_resolution_refuse_anonymous_account_responses() {
+        let (account, _, http) = fixture();
+        account.accept_token(token(true), true).unwrap();
+        for _ in 0..2 {
+            http.gets
+                .lock()
+                .unwrap()
+                .push_back(Ok(serde_json::json!({"actions":[]})));
+        }
+        assert!(account.search_music("song".into()).is_err());
+        assert!(account.resolve_music_stream("abcdefghijk".into()).is_err());
+        assert_eq!(
+            &*http.calls.lock().unwrap(),
+            &["music:account/account_menu", "music:account/account_menu"]
+        );
+    }
+    #[test]
+    fn music_api_retries_authorization_once_with_a_refreshed_token() {
+        let (account, _, http) = fixture();
+        account.accept_token(token(true), true).unwrap();
+        http.gets
+            .lock()
+            .unwrap()
+            .push_back(Err("YouTube rejected authorization; sign in again".into()));
+        http.forms.lock().unwrap().push_back(Ok(token(false)));
+        http.gets
+            .lock()
+            .unwrap()
+            .push_back(Ok(music::tests::account_response()));
+        http.gets
+            .lock()
+            .unwrap()
+            .push_back(Ok(serde_json::json!({"contents":[]})));
+        assert!(account.search_music("song".into()).unwrap().is_empty());
+        assert_eq!(
+            &*http.calls.lock().unwrap(),
+            &[
+                "music:account/account_menu",
+                "token",
+                "music:account/account_menu",
+                "music:search"
+            ]
+        );
+    }
+    #[test]
+    fn invalid_music_input_never_reaches_the_network() {
+        let (account, _, http) = fixture();
+        assert!(account.search_music(" ".into()).is_err());
+        assert!(account.search_music("x".repeat(201)).is_err());
+        assert!(account
+            .resolve_music_stream("https://example.invalid".into())
+            .is_err());
+        assert!(http.calls.lock().unwrap().is_empty());
+    }
+    #[test]
+    fn failed_music_verification_does_not_replace_a_previous_grant() {
+        let (account, store, http) = fixture();
+        account.accept_token(token(true), true).unwrap();
+        let mut next = token(true);
+        next["refresh_token"] = "unverified-refresh".into();
+        next["access_token"] = "unverified-access".into();
+        http.gets
+            .lock()
+            .unwrap()
+            .push_back(Ok(serde_json::json!({"actions":[]})));
+        assert!(account.finish_sign_in(next).is_err());
+        assert_eq!(&**store.read("refresh").unwrap().unwrap(), "fake-refresh");
+        assert_eq!(&*account.token().unwrap(), "fake-access");
+    }
+    #[test]
+    fn cancelled_login_does_not_persist_new_credentials() {
+        let (account, store, http) = fixture();
+        account.cancel();
+        assert!(account.finish_sign_in(token(true)).is_err());
+        assert!(store.read("refresh").unwrap().is_none());
+        assert!(http.calls.lock().unwrap().is_empty());
+    }
+    #[test]
+    fn a_new_grant_is_saved_only_after_music_account_verification() {
+        let (account, store, http) = fixture();
+        http.gets
+            .lock()
+            .unwrap()
+            .push_back(Ok(music::tests::account_response()));
+        account.finish_sign_in(token(true)).unwrap();
+        assert_eq!(&**store.read("refresh").unwrap().unwrap(), "fake-refresh");
+        assert_eq!(
+            &*http.calls.lock().unwrap(),
+            &["music:account/account_menu"]
+        );
+    }
+    #[test]
+    fn invalid_publisher_configuration_is_rejected() {
+        let invalid = ClientConfig {
+            client_id: "invalid".into(),
+            client_secret: "invalid".into(),
+        };
+        assert!(Account::new(Some(invalid)).is_err());
+    }
+    #[test]
     fn busy_account_rejects_overlapping_operations() {
         let (account, _, _) = fixture();
         let _guard = account.operation.lock().unwrap();
-        assert!(account.configure(config()).is_err());
+        assert!(account.sign_in().is_err());
         assert!(account.channel().is_err());
         assert!(account.playlists(None).is_err());
     }

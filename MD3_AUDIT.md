@@ -38,3 +38,13 @@ pairs: on-surface/surface **14.35:1**, on-surface-variant/surface-container
 **9.56:1**, on-primary/primary **7.71:1**, and primary/surface-container **9.56:1**.
 These normal text pairs exceed 4.5:1; this calculation does not substitute for a
 complete screen-reader, focus, theming, or dynamic-content audit.
+
+
+The streamlined welcome was rendered in the real Tauri/WebKitGTK window and
+inspected from `reports/streamlined-welcome.png`. OAuth setup forms and lengthy
+technical paragraphs are removed; native diagnostics are separate. Compact/wide
+welcome and diagnostic layouts passed actual overflow checks. Search results are
+bounded to 25 and use textContent. Motion stays on existing transform tokens and
+polling stops when hidden. The signed-in Music view has state tests but no real
+account or final visual/accessibility audit. This remains a partial implementation;
+no final MD3 compliance or complete-client release is claimed.

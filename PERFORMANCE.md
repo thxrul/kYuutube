@@ -94,3 +94,19 @@ Evidence: `reports/account-desktop.json`. The entire app/helper tree is measured
 external test infrastructure is excluded. Memory still fails the original target.
 This does not measure live Google consent, real YouTube playback, downloads,
 Windows/macOS behavior, or the two-hour soak/throttle requirements.
+
+
+## Streamlined welcome and native network implementation
+
+Short virtual Linux / WebDriver run using Never graphics policy plus the
+prelaunch compositing switch:
+
+| State | Median summed RSS MiB | Median PSS MiB | CPU % of one core |
+| --- | ---: | ---: | ---: |
+| Visible streamlined welcome | 431.46 | 234.80 | 0.10 |
+| Separate diagnostics, local WAV playback | 476.50 | 278.59 | 1.16 |
+
+Evidence: `reports/streamlined-desktop.json`. Memory still fails. These are not
+real YouTube Music or Windows/macOS numbers. Native loopback HTTP playback passed
+functional tests, but no Music performance, physical audio, soak, or throttle
+claim follows from it. The portable audio runtime is not yet bundled.

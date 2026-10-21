@@ -5,10 +5,13 @@ It includes native system-browser Google OAuth for read-only YouTube channel and
 playlist checks, plus a local-file audio player. YouTube Music streaming, offline
 downloads, library sync, and Metrolist feature parity are not implemented.
 
-For account tests, follow the included `GOOGLE_ACCOUNT.md`. The account screen
-needs WebView2 on Windows, but does not require libmpv or a configured audio
-sample. Save your own Desktop OAuth client in the OS keystore, then complete
-consent in your browser. No Google password is entered in the app.
+For account sign-in, follow the included `GOOGLE_ACCOUNT.md`. The publisher
+registers OAuth once; users do not enter client credentials. The account screen
+needs WebView2 on Windows and an OS password store. It does not require libmpv
+or a configured audio sample. No Google password is entered in the app.
+
+Local audio tests are now under **About kYuutube → Audio diagnostics**. The
+main screen contains only the account flow and a short playback-preview notice.
 
 The binary uses the operating system's webview and dynamically loads libmpv.
 WebKitGTK on Linux and WebView2 on Windows must be installed. macOS uses the

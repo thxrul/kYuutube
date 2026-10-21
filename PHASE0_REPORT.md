@@ -346,3 +346,36 @@ parity remain blocked by verified service authentication/playback and the budget
 
 See `docs/METROLIST_PARITY.md` for the feature inventory, `docs/GOOGLE_ACCOUNT.md`
 for Windows account testing, and `TEST_REPORT.md` for precise verification limits.
+
+
+## Simplified login and native playback publication hold
+
+The user subsequently removed end-user OAuth setup from the desired product flow
+and explicitly required native Music playback to work before publishing again.
+Source now supplies publisher-owned OAuth registration at build time and presents
+one browser sign-in action. A Google token alone no longer marks Music login as
+successful: the Music account endpoint must return authenticated account details
+before the new grant is saved. Failed/cancelled attempts do not replace a prior
+grant. The cloud's repository integration cannot list/administer Actions secrets
+(HTTP 403); publisher provisioning is documented in `docs/PUBLISHER_SETUP.md`.
+
+An experimental fixed-origin Music search/player adapter and native network audio
+controller have been implemented. Native HTTP-fixture playback works in the
+prepared Linux environment, but real Music compatibility remains unproven. No
+cookie importer, alternate client, signature/cipher transformer, attestation
+provider, ad skipper, or entitlement override was added. Responses requiring ads
+or unsupported protected/processed streams are refused. Ad-field absence is not
+proof that live account behavior meets the original requirements.
+
+Twenty-nine account/Music tests, four native audio integration tests, fourteen
+frontend state tests, three release-gate tests, and ten actual Tauri UI checks
+passed locally. These tests have the limitations recorded in `TEST_REPORT.md`.
+The Music origin still returned proxy CONNECT 403 at 09:01:06 UTC on 2026-10-21;
+no provider API response, interactive consent, or real track playback was obtained.
+The new local WAV UI run still fails memory: 278.59 MiB PSS / 476.50 MiB summed
+RSS during playback, 1.16% one-core CPU, under short virtual Linux instrumentation.
+
+Publication is held. Native end-to-end account → search → audible Music playback,
+account/advertisement handling, portable audio runtime packaging, memory, and the
+original platform/soak/throttle/audit gates must pass before calling the app a
+complete download-and-listen native client. Existing alpha releases are unchanged.

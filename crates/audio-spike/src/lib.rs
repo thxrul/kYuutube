@@ -1,10 +1,11 @@
-//! Local-file feasibility engine. No YouTube stream extraction or account access.
+//! Native audio engine. Network input is restricted to expiring Google media leases.
 use libloading::Library;
 use serde::Serialize;
 use std::{
     ffi::{c_char, c_int, c_void, CStr, CString},
     path::{Path, PathBuf},
     ptr::NonNull,
+    time::{Duration, SystemTime, UNIX_EPOCH},
 };
 
 type Create = unsafe extern "C" fn() -> *mut c_void;
@@ -21,6 +22,58 @@ pub struct Snapshot {
     pub duration_seconds: Option<f64>,
     pub paused: bool,
     pub audio_output: String,
+}
+
+// This type is deliberately not serializable or Debug: signed media URLs must
+// never be returned to JavaScript, saved to disk, or included in logs.
+pub struct RemoteMedia {
+    source: zeroize::Zeroizing<String>,
+    expires_at: SystemTime,
+}
+impl RemoteMedia {
+    pub fn google_audio(source: String) -> Result<Self, String> {
+        if source.len() > 16384 {
+            return Err("Invalid media address".into());
+        }
+        let parsed = url::Url::parse(&source).map_err(|_| "Invalid media address")?;
+        let host = parsed.host_str().ok_or("Invalid media host")?;
+        if parsed.scheme() != "https"
+            || !host.ends_with(".googlevideo.com")
+            || parsed.port_or_known_default() != Some(443)
+            || !parsed.username().is_empty()
+            || parsed.password().is_some()
+            || parsed.fragment().is_some()
+            || parsed.path() != "/videoplayback"
+        {
+            return Err("Unsupported media address".into());
+        }
+        let expiry: Vec<_> = parsed
+            .query_pairs()
+            .filter(|(key, _)| key == "expire")
+            .collect();
+        if expiry.len() != 1 {
+            return Err("Media expiry is unavailable".into());
+        }
+        let seconds: u64 = expiry[0].1.parse().map_err(|_| "Invalid media expiry")?;
+        let expires_at = UNIX_EPOCH
+            .checked_add(Duration::from_secs(seconds))
+            .ok_or("Invalid media expiry")?;
+        let remaining = expires_at
+            .duration_since(SystemTime::now())
+            .map_err(|_| "Media address expired")?;
+        if remaining < Duration::from_secs(30) || remaining > Duration::from_secs(6 * 3600 + 60) {
+            return Err("Media address expired or has an invalid lifetime".into());
+        }
+        Ok(Self {
+            source: zeroize::Zeroizing::new(source),
+            expires_at,
+        })
+    }
+    fn usable(&self) -> bool {
+        self.expires_at
+            .duration_since(SystemTime::now())
+            .is_ok_and(|time| time > Duration::from_secs(5))
+    }
 }
 
 pub struct Player {
@@ -150,6 +203,10 @@ impl Player {
                 ("audio-display", "no"),
                 ("ytdl", "no"),
                 ("load-scripts", "no"),
+                ("tls-verify", "yes"),
+                ("cache-secs", "20"),
+                ("demuxer-max-bytes", "8MiB"),
+                ("demuxer-max-back-bytes", "2MiB"),
                 ("keep-open", "yes"),
                 ("idle", "yes"),
             ] {
@@ -196,6 +253,17 @@ impl Player {
             "replace",
         ])?;
         self.command(&["set", "pause", "no"])
+    }
+
+    pub fn load_stream(&self, media: &RemoteMedia) -> Result<(), String> {
+        if !media.usable() {
+            return Err("Media address expired; choose the track again".into());
+        }
+        self.command(&["loadfile", &media.source, "replace"])?;
+        self.command(&["set", "pause", "no"])
+    }
+    pub fn stop(&self) -> Result<(), String> {
+        self.command(&["stop"])
     }
 
     pub fn pause(&self, paused: bool) -> Result<(), String> {

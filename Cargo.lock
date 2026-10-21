@@ -2059,6 +2059,8 @@ dependencies = [
  "libloading 0.8.9",
  "serde",
  "serde_json",
+ "url",
+ "zeroize",
 ]
 
 [[package]]
@@ -2079,10 +2081,12 @@ dependencies = [
  "base64 0.22.1",
  "getrandom 0.3.4",
  "keyring",
+ "kyuutube-audio-spike",
  "reqwest",
  "serde",
  "serde_json",
  "sha2",
+ "time",
  "url",
  "webbrowser",
  "zeroize",

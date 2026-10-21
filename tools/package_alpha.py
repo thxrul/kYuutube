@@ -29,6 +29,10 @@ for target, label in targets.items():
     info = json.loads((folder / 'BUILD_INFO.json').read_text())
     if info['source_commit'] != source or info['target'] != target:
         raise ValueError('Unexpected artifact provenance')
+    if info.get('auth_mode') == 'publisher-browser-oauth' and info.get('publisher_oauth_configured') is not True:
+        raise ValueError('Publisher OAuth is missing. Configure the repository Actions secrets and rebuild before publishing this sign-in flow.')
+    if info.get('native_music_playback_verified') is not True:
+        raise ValueError('Native YouTube Music playback has not been verified. Publication is on hold until a real authenticated track plays.')
     for line in (folder / 'SHA256SUMS.txt').read_text().splitlines():
         expected, name = line.split('  ', 1)
         if Path(name).name != name:

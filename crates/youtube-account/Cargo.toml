@@ -5,6 +5,8 @@ edition = "2021"
 publish = false
 
 [dependencies]
+kyuutube-audio-spike = { path = "../audio-spike" }
+time = "0.3"
 base64 = "0.22"
 getrandom = "0.3"
 reqwest = { version = "0.13", default-features = false, features = ["blocking", "json", "native-tls", "form", "query"] }

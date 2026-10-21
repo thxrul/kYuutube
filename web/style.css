@@ -33,19 +33,36 @@ footer { margin-top: 24px; font: var(--md-sys-typescale-label-large); }
 @media(max-width:599px) { body { flex-direction: column; } nav { width: 100%; flex-direction: row; border-right: 0; border-bottom: 1px solid var(--md-sys-color-outline-variant); padding: 8px 16px; } main { padding: 24px 16px; } .player { padding: 16px; grid-template-columns: 1fr; } .art { display:none; } }
 @media(prefers-reduced-motion:reduce) { button { transition: none; } }
 
-.account { margin: 32px 0; padding: 24px; background: var(--md-sys-color-surface-container); border-radius: var(--md-sys-shape-corner-extra-large); }
-.account form { display: grid; gap: 8px; margin: 24px 0; }
-.account form button { justify-self: start; margin-top: 8px; }
-.account input { min-height: 56px; min-width: 0; width: 100%; padding: 8px 16px; border: 1px solid var(--md-sys-color-on-surface-variant); border-radius: var(--md-sys-shape-corner-large); background: var(--md-sys-color-surface); color: var(--md-sys-color-on-surface); font: var(--md-sys-typescale-body-large); }
-.account input::placeholder { color: var(--md-sys-color-on-surface-variant); }
-.account-actions { display: flex; flex-wrap: wrap; gap: 8px; margin: 16px 0; }
-button.outlined { background: var(--md-sys-color-surface-container); color: var(--md-sys-color-primary); border: 1px solid var(--md-sys-color-on-surface-variant); }
+.account-actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 16px; margin: 32px 0 16px; }
+button.outlined { background: var(--md-sys-color-surface); color: var(--md-sys-color-primary); border: 1px solid var(--md-sys-color-outline-variant); }
+button.text-button { background: var(--md-sys-color-surface); color: var(--md-sys-color-primary); padding: 0 16px; }
 [hidden] { display: none !important; }
-summary { cursor: pointer; min-height: 48px; display: list-item; padding: 16px 0; color: var(--md-sys-color-primary); }
-.account ol { padding-left: 24px; }
-.account li { margin-bottom: 16px; }
-#playlist-results { list-style: none; margin: 16px 0 0; padding: 0; }
-#playlist-results li { padding: 16px 0; margin: 0; border-top: 1px solid var(--md-sys-color-outline-variant); overflow-wrap: anywhere; }
-#playlist-results strong, #playlist-results span { display: block; }
-#playlist-results span, #account-state { color: var(--md-sys-color-on-surface-variant); }
-@media(max-width:599px) { .account { padding: 16px; } }
+a { color: var(--md-sys-color-primary); min-height: 48px; display: inline-flex; align-items: center; }
+.welcome-page { min-height: 100vh; }
+.welcome { min-height: 100vh; display: flex; flex-direction: column; width: 100%; }
+.brand { display: flex; gap: 16px; align-items: center; font: var(--md-sys-typescale-title-large); }
+.brand-mark { width: 48px; height: 48px; display: grid; place-items: center; background: var(--md-sys-color-primary); color: var(--md-sys-color-on-primary); border-radius: var(--md-sys-shape-corner-large); }
+.welcome-content { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 40px 0; }
+.welcome-content h1 { max-width: 640px; margin: 0 0 24px; }
+#account-intro, #account-state, .preview-note { color: var(--md-sys-color-on-surface-variant); }
+#account-state { min-height: 24px; margin: 0; }
+.preview-note { font: var(--md-sys-typescale-label-large); margin-top: 24px; }
+.welcome footer { text-align: center; margin-top: 0; }
+dialog { max-width: min(560px, calc(100vw - 32px)); padding: 24px; background: var(--md-sys-color-surface-container-high); color: var(--md-sys-color-on-surface); border: 1px solid var(--md-sys-color-outline-variant); border-radius: var(--md-sys-shape-corner-extra-large); }
+dialog .account-actions { justify-content: space-between; }
+dialog button { background: var(--md-sys-color-primary); }
+@media(max-width:599px) { .welcome-content { padding: 32px 0; } }
+#music-browser { width: 100%; max-width: 800px; margin: 0 auto 32px; }
+#music-search { display: flex; gap: 8px; margin: 24px 0; }
+#music-query { min-height: 56px; width: 100%; min-width: 0; padding: 8px 16px; border: 1px solid var(--md-sys-color-on-surface-variant); border-radius: var(--md-sys-shape-corner-full); background: var(--md-sys-color-surface-container); color: var(--md-sys-color-on-surface); font: var(--md-sys-typescale-body-large); }
+#music-query::placeholder { color: var(--md-sys-color-on-surface-variant); }
+#music-results { list-style: none; margin: 0; padding: 0; }
+#music-results li { border-top: 1px solid var(--md-sys-color-outline-variant); }
+#music-results button { width: 100%; text-align: left; padding: 16px; background: var(--md-sys-color-surface); color: var(--md-sys-color-on-surface); border-radius: var(--md-sys-shape-corner-large); }
+#music-results strong, #music-results span { display: block; overflow-wrap: anywhere; }
+#music-results span, #music-status { color: var(--md-sys-color-on-surface-variant); }
+#music-player { width: 100%; max-width: 800px; margin: 0 auto 32px; grid-template-columns: 1fr; }
+.visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
+html[data-account-verified=true] .welcome-content { flex: 0; padding: 24px 0; text-align: left; align-items: flex-start; }
+html[data-account-verified=true] .welcome-content h1 { font: var(--md-sys-typescale-title-large); margin-bottom: 8px; }
+html[data-account-verified=true] .account-actions { margin: 16px 0; }

@@ -9,6 +9,7 @@ on:
       - 'crates/**'
       - 'src-tauri/**'
       - 'web/**'
+      - 'tests/**'
       - 'tools/package_spike.py'
       - 'tools/make_sample.py'
       - 'tools/Measure-ProcessTree.ps1'
@@ -40,6 +41,10 @@ jobs:
     env:
       CARGO_BUILD_JOBS: 2
       MACOSX_DEPLOYMENT_TARGET: '12.0'
+      # Publisher-owned installed-app registration, never user tokens. Fork/PR
+      # builds are intentionally unprovisioned previews.
+      KYUUTUBE_GOOGLE_CLIENT_ID: ${{ github.event_name != 'pull_request' && secrets.KYUUTUBE_GOOGLE_CLIENT_ID || '' }}
+      KYUUTUBE_GOOGLE_CLIENT_SECRET: ${{ github.event_name != 'pull_request' && secrets.KYUUTUBE_GOOGLE_CLIENT_SECRET || '' }}
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
         with:
@@ -63,6 +68,11 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y --no-install-recommends libwebkit2gtk-4.1-dev libssl-dev libayatana-appindicator3-dev librsvg2-dev libxdo-dev libmpv2
+      - name: Account screen state tests
+        shell: bash
+        run: |
+          node --test tests/account-ui.test.mjs tests/music-ui.test.mjs
+          python3 -m unittest discover -s tests -p test_release_provisioning.py
       - name: Generate local test sample
         shell: bash
         run: python3 tools/make_sample.py

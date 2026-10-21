@@ -10,7 +10,7 @@ The user requests native YouTube login and Metrolist's functions on desktop. The
 
 Metrolist's `LoginScreen.kt` opens Google sign-in in Android WebView, reads `CookieManager` for the YouTube Music origin, and extracts visitor/session information from the signed-in page. Its InnerTube implementation then uses that browser session. This is not Google's desktop OAuth flow.
 
-The requested desktop flow uses the system browser, PKCE S256, a random state, a short-lived loopback callback, and Windows Credential Manager / macOS Keychain / Linux Secret Service. The new account diagnostic implements this flow with a user-owned **Desktop app** OAuth client. It can attempt read-only YouTube Data API channel and playlist access. It **does not create or import a YouTube Music browser session** and must not be described as Metrolist-compatible login. No Google password or browser-cookie import is requested.
+The requested desktop flow uses the system browser, PKCE S256, a random state, a short-lived loopback callback, and Windows Credential Manager / macOS Keychain / Linux Secret Service. The current account flow uses a publisher-owned **Desktop app** OAuth client embedded by the release build. End users see one sign-in button and complete consent in their system browser; they do not register a Google Cloud project. It can attempt read-only YouTube Data API channel and playlist access. It **does not create or import a YouTube Music browser session** and must not be described as Metrolist-compatible login. No Google password or browser-cookie import is requested.
 
 The existing cloud proxy still returns CONNECT 403 for `music.youtube.com`. A successful account-consent test needs the user's Windows browser and client configuration. A successful Data API test will still not validate InnerTube, stream resolution, entitlements, downloads, or playback. Do not add a fake connected state or treat compilation and mocked-token tests as live account validation.
 
@@ -18,16 +18,16 @@ The existing cloud proxy still returns CONNECT 403 for `music.youtube.com`. A su
 
 | Metrolist function | Desktop status / next requirement |
 | --- | --- |
-| Google / YouTube Music login, channel switching | System-browser Google OAuth implemented as a diagnostic; live consent untested; Music session/channel switching unavailable |
+| Google / YouTube Music login, channel switching | Publisher-configured browser OAuth plus Music account verification implemented experimentally; live consent/Music compatibility unverified; channel switching unavailable |
 | Personalized home / quick picks / recommendations | Pending a verified Music account API |
-| Search songs, albums, artists, videos, playlists | Not implemented; must verify Music metadata access |
+| Search songs, albums, artists, videos, playlists | Experimental native Music search implemented with bounded results; live access unverified |
 | Album / artist detail pages, subscriptions | Not implemented |
 | Charts, moods, genres, new releases, related music | Not implemented |
 | YouTube Music library, likes, saved albums/artists, bidirectional sync | Not implemented; Data API read-only playlist diagnostic is not this feature |
 | Remote playlists: create, rename, delete, import, add/remove/reorder tracks | Not implemented; secure OAuth scope and Music/YouTube playlist compatibility need validation |
 | Local playlists and queue, reorder, shuffle/repeat, session resume | Not implemented |
-| Network music/video and background playback | Not implemented; local-file libmpv diagnostic only |
-| Play/pause, seek, volume | Implemented for a configured local file, previously tested under virtual Linux audio |
+| Network music/video and background playback | Experimental Music resolver and native network playback implemented; loopback HTTP audio tested; real Music playback unverified |
+| Play/pause, seek, volume | Implemented for local files and native network audio; real Music track and physical output remain unverified |
 | Offline downloads, cache, quota/storage management | Requested and in scope; not implemented. Requires a verified authenticated media path and account entitlement handling |
 | Gapless/crossfade, normalization, silence skipping | Not implemented |
 | Equalizer, tempo, pitch, audio quality | Not implemented |
@@ -54,3 +54,11 @@ The existing cloud proxy still returns CONNECT 403 for `music.youtube.com`. A su
 5. Implement the remaining feature groups against those verified interfaces, then run the required full test passes, soak, platform/throttle checks, and design audit before claiming parity.
 
 The code added in this iteration is original Rust and JavaScript; no Metrolist implementation, artwork, or branding was copied. Metrolist's GPL-3.0 license must be addressed if future implementation copies or adapts its source. This document is a feature analysis, not a claim of an approved or finished port.
+
+
+The user subsequently made **working native Music playback before publishing**
+an explicit condition. New release packaging now refuses unverified playback
+artifacts. The experimental service adapter uses a single fixed Music client,
+requires an authenticated account-menu response, and does not fall back to cookie
+imports, alternate clients, cipher transforms, attestation providers, or ignored
+advertisements. This is implementation progress, not a live playback pass.

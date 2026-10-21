@@ -1,0 +1,65 @@
+{
+  "date_utc": "2026-10-21",
+  "publication": "held_at_user_request_until_live_native_music_playback_passes",
+  "live_music": {
+    "status": "blocked_not_verified",
+    "origin": "https://music.youtube.com",
+    "latest_transport_probe_utc": "2026-10-21 09:01:06",
+    "proxy_connect_status": 403,
+    "curl_exit_code": 56,
+    "provider_api_response_received": false,
+    "google_browser_consent": "not_run",
+    "music_account_search_track_playback": "not_run"
+  },
+  "implemented": [
+    "publisher_configured_system_browser_oauth",
+    "music_account_verification_before_saving_new_grant",
+    "native_music_search",
+    "expiring_google_media_lease_resolution",
+    "native_player_load_pause_seek_volume_stop",
+    "bounded_search_ui",
+    "stop_and_signout_cancel_stale_playback"
+  ],
+  "local_checks": {
+    "account_and_music_protocol_tests": {
+      "passed": 29,
+      "failed": 0,
+      "credentials": "fictitious",
+      "provider_responses": "mocked"
+    },
+    "native_audio_integration_tests": {
+      "passed": 4,
+      "failed": 0,
+      "sources": [
+        "generated_local_wav",
+        "loopback_http_wav"
+      ],
+      "physical_output": false
+    },
+    "frontend_state_tests": {
+      "passed": 14,
+      "failed": 0
+    },
+    "publication_gate_tests": {
+      "passed": 3,
+      "failed": 0
+    },
+    "real_tauri_webview_checks": {
+      "passed": 10,
+      "failed": 0,
+      "source": "reports/streamlined-desktop.json"
+    },
+    "clippy_warnings_as_errors": "passed",
+    "publisher_build_configuration": {
+      "both_fixture_settings": "compiled_no_auth_attempt",
+      "partial_settings": "rejected"
+    }
+  },
+  "known_limits": [
+    "Live Google consent and Music OAuth compatibility unverified",
+    "Ads/entitlements and a real Music stream have not been validated",
+    "Native audio runtime not bundled for portable releases",
+    "Linux webview memory budget still fails",
+    "Offline downloads, full Metrolist parity, soak/throttle/platform suites unfinished"
+  ]
+}

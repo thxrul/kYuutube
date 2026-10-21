@@ -1,92 +1,102 @@
-// Only public account metadata is returned over IPC. Never put credentials into
-// localStorage, a URL, console output, or a rendered error message.
+// Account tokens and the publisher's OAuth registration never enter the web UI.
 (() => {
   const invoke = window.__TAURI__.core.invoke;
   const $ = (id) => document.getElementById(id);
-  let configured = false;
-  let connected = false;
+  let available = false;
+  let hasSession = false;
+  let verified = false;
   let busy = false;
-  let cursor = null;
-  const status = (text) => { $('account-state').textContent = text; };
-  function controls() {
-    $('google-sign-in').disabled = busy || !configured;
-    $('save-google').disabled = busy;
-    $('disconnect-google').disabled = busy || !configured;
-    $('load-playlists').disabled = busy || !connected;
-    $('cancel-sign-in').hidden = !busy;
-    $('client-id').disabled = busy;
-    $('client-secret').disabled = busy;
+  let signingIn = false;
+  let publishedState = null;
+  const status = (message) => { $('account-state').textContent = message; };
+  function render() {
+    $('google-sign-in').disabled = busy || !available;
+    $('google-sign-in').hidden = verified;
+    $('cancel-sign-in').hidden = !signingIn;
+    $('cancel-sign-in').disabled = !signingIn;
+    $('disconnect-google').hidden = !hasSession;
+    $('disconnect-google').disabled = busy;
+    $('retry-account').disabled = busy;
+    $('welcome-heading').textContent = verified ? 'You’re signed in.' : 'Your music. Your space.';
+    $('account-intro').textContent = verified ? 'Search for something you love.' : 'Sign in with Google to connect your account.';
+    document.documentElement.dataset.accountVerified = String(verified);
+    if (publishedState !== verified) {
+      publishedState = verified;
+      window.dispatchEvent(new CustomEvent('kyuutube-account', { detail: { connected: verified } }));
+    }
   }
-  async function readStatus() {
-    try {
-      const value = await invoke('account_status');
-      configured = value.configured;
-      connected = value.connected;
-      status(connected ? 'Google authorization saved. Check your YouTube channel or playlists below.' : configured ? 'Client saved securely. Continue in your system browser.' : 'Set up a Google Desktop app OAuth client to connect.');
-    } catch (error) { status(String(error)); }
-    controls();
+  function messageFor(error) {
+    const message = String(error);
+    if (message.includes('not available in this build')) return 'Sign-in isn’t available in this build.';
+    if (/credential store|credentials|securely save/i.test(message) && !message.includes('Local credentials removed')) return 'Unlock your device’s password store, then try again.';
+    if (/revoked|expired|rejected authorization|Sign in with Google first/.test(message)) return 'Please sign in again.';
+    if (message.includes('declined')) return 'Sign-in wasn’t completed.';
+    if (message.includes('cancelled')) return 'Sign-in cancelled.';
+    if (message.includes('timed out')) return 'Sign-in timed out. Try again.';
+    if (message.includes('system browser')) return 'Couldn’t open your browser. Please try again.';
+    if (/Could not reach|connection/.test(message)) return 'Couldn’t connect. Check your internet connection.';
+    if (message.includes('Local credentials removed')) return 'Signed out on this device. Remove app access in your Google Account if needed.';
+    return 'Couldn’t connect your account. Please try again.';
   }
-  async function run(task) {
+  async function inspectSession() {
+    const state = await invoke('account_status');
+    available = state.available;
+    hasSession = state.has_session;
+  }
+  async function run(task, signIn = false) {
     if (busy) return;
     busy = true;
-    controls();
+    signingIn = signIn;
+    $('retry-account').hidden = true;
+    render();
     try { await task(); }
-    catch (error) { status(String(error)); }
-    finally { busy = false; controls(); }
+    catch (error) {
+      // Reconcile persisted state after cancellation, expiry, and remote sign-out
+      // failures. A saved grant alone never sets the verified UI state.
+      try { await inspectSession(); } catch (_) { /* Keep the last known state. */ }
+      status(messageFor(error));
+      $('retry-account').hidden = false;
+    } finally {
+      busy = false;
+      signingIn = false;
+      render();
+    }
   }
-  $('google-config').onsubmit = (event) => {
-    event.preventDefault();
-    run(async () => {
-      const clientId = $('client-id').value.trim();
-      const clientSecret = $('client-secret').value.trim();
-      // Clear the secret field before IPC settles; it is never read back.
-      $('client-secret').value = '';
-      await invoke('configure_google', { clientId, clientSecret });
-      $('client-id').value = '';
-      connected = false;
-      configured = true;
-      $('playlist-results').replaceChildren();
-      cursor = null;
-      $('load-playlists').textContent = 'Check my playlists';
-      status('Client saved in your OS credential store. Sign in to continue.');
-    });
-  };
-  $('google-sign-in').onclick = () => run(async () => {
-    status('Finish Google consent in your browser, then return here. Sign-in expires after five minutes.');
-    const channel = await invoke('google_sign_in');
-    connected = true;
-    status(`Connected to YouTube channel: ${channel.title}. YouTube Music streaming is still unverified.`);
+  const restore = () => run(async () => {
+    verified = false;
+    render();
+    status('Connecting…');
+    await inspectSession();
+    if (!available) { status('Sign-in isn’t available in this build.'); return; }
+    if (hasSession) {
+      await invoke('restore_google_session');
+      verified = true;
+    }
+    status('');
   });
+  $('google-sign-in').onclick = () => run(async () => {
+    status('Finish signing in in your browser.');
+    await invoke('google_sign_in');
+    hasSession = true;
+    verified = true;
+    status('');
+  }, true);
   $('cancel-sign-in').onclick = async () => {
-    try { await invoke('cancel_google_sign_in'); status('Cancellation requested. Waiting for the current operation to finish.'); }
-    catch (error) { status(String(error)); }
+    if (!signingIn || $('cancel-sign-in').disabled) return;
+    $('cancel-sign-in').disabled = true;
+    try { await invoke('cancel_google_sign_in'); status('Cancelling…'); }
+    catch (error) { status(messageFor(error)); $('cancel-sign-in').disabled = false; }
   };
   $('disconnect-google').onclick = () => run(async () => {
-    try { await invoke('disconnect_google'); status('Disconnected. Local credentials removed and Google grant revoked.'); }
-    finally {
-      // Re-read the secure-store status even if remote revocation failed.
-      try {
-        const value = await invoke('account_status');
-        configured = value.configured; connected = value.connected;
-      } catch (_) { configured = false; connected = false; }
-      $('playlist-results').replaceChildren();
-      cursor = null;
-    }
+    verified = false;
+    render();
+    status('Signing out…');
+    await invoke('disconnect_google');
+    hasSession = false;
+    status('');
   });
-  $('load-playlists').onclick = () => run(async () => {
-    const result = await invoke('youtube_playlists', { nextPage: cursor });
-    // Replace each bounded page instead of growing the DOM with the whole library.
-    const fragment = document.createDocumentFragment();
-    for (const item of result.items) {
-      const li = document.createElement('li');
-      const title = document.createElement('strong'); title.textContent = item.title;
-      const owner = document.createElement('span'); owner.textContent = item.subtitle;
-      li.append(title, owner); fragment.append(li);
-    }
-    $('playlist-results').replaceChildren(fragment);
-    cursor = result.next_page;
-    $('load-playlists').textContent = cursor ? 'Next page' : 'Reload playlists';
-    status(result.items.length ? `Showing ${result.items.length} YouTube playlists. These are read-only in this diagnostic.` : 'No YouTube playlists were returned for this account.');
-  });
-  readStatus();
+  $('retry-account').onclick = restore;
+  $('about-open').onclick = () => $('about-dialog').showModal();
+  $('about-close').onclick = () => $('about-dialog').close();
+  restore();
 })();

@@ -1,0 +1,13 @@
+{
+  "test_kind": "local sample in Tauri/WebKitGTK under Xvfb; no physical audio or YouTube",
+  "requested_graphics_policy": "never",
+  "prelaunch_compositing_disabled": true,
+  "checks": [
+    "Welcome screen loaded in the actual Tauri system webview",
+    "No user credential fields or Google Cloud instructions; unprovisioned build cannot claim working sign-in",
+    "Removed user credential configuration IPC is rejected by the native application"
+  ],
+  "stages": {},
+  "status": "failed",
+  "error": "timed out"
+}
