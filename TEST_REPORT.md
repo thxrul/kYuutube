@@ -15,9 +15,9 @@ Date: 2026-10-21 (Asia/Colombo). Phase 0 only; native diagnostic checks passed, 
 | Anonymous music search | Failed: proxy denial |
 | Stream metadata resolution, no media download | Failed: proxy denial |
 | Independent YouTube / YouTube Music HTTPS checks | CONNECT HTTP 403; diagnostics identify policy denial |
-| Google login and token refresh | Not run; no client configuration/interactive consent |
+| Live Google login and token refresh | Not run; no client configuration/interactive consent; local protocol tests are recorded below |
 | Audio playback | Generated local WAV through a virtual sink passed; physical audio and YouTube not run |
-| API, queue, auth, resolution unit/integration tests | Not run; production implementation absent |
+| Production Music API, queue, stream resolution tests | Not run; production implementation absent |
 | Full application UI end-to-end tests | Not run; only local diagnostic UI exercised |
 | Three full bug-hunt passes | Not run; no fake clean passes recorded |
 | Failure injection | Not run |
@@ -87,3 +87,40 @@ Both executables in every artifact had the selected PE, ELF, or Mach-O architect
 The helper text matched source after normalizing Windows checkout line endings;
 no artifact or expected checksum was modified. `reports/ci-builds.json` records
 artifact links, digests, and binary sizes. The full client remains incomplete.
+
+## Native Google account iteration (2026-10-21)
+
+The user confirmed system-browser OAuth, requested offline downloads, and excluded
+Last.fm/Discord. Metrolist's Android cookie login was inspected but not copied.
+The new Rust account diagnostic implements desktop OAuth and read-only YouTube
+Data API checks. It is not verified YouTube Music authentication or playback.
+
+- `cargo test --locked -p kyuutube-youtube-account`: **13 passed, 0 failed**.
+  Tests use fictitious credentials and in-memory test stores; they include a real
+  local TCP callback and HTTP response parsing. Coverage includes RFC 7636 PKCE,
+  fresh random state/verifier, callback host/path/state/duplicate rejection,
+  cancellation/timeout, bounded responses and redacted errors, refresh lifecycle,
+  transient failure versus revoked grant, one retry after an API 401, configuration
+  changes, unavailable secure store, disconnect while offline, bounded playlist
+  pages, and overlapping account operations. No real Google tokens were used.
+- `cargo clippy --locked --workspace --all-targets -- -D warnings`: passed.
+- `cargo build --release --locked --workspace`: passed on Linux.
+- Real Tauri/WebKitGTK/Xvfb UI run with the previously tested software graphics
+  settings: **7 checks passed**. The new check submitted an invalid client through
+  native IPC, verified a validation error, checked that the password field was
+  cleared, and checked there were no localStorage credentials. Existing local
+  play/pause/seek/volume and compact/wide layout checks passed.
+- Evidence: `reports/account-desktop.json`, `reports/account-desktop.png`.
+  Local playback measured median **473.07 MiB summed RSS / 277.40 MiB PSS**,
+  **1.91%** of one CPU core during the short automated measurement. Idle was
+  **429.11 MiB RSS / 235.78 MiB PSS**, **0.42%** CPU. Memory still fails.
+
+Initial integration found a missing explicit reqwest query feature; enabling it
+fixed compilation. Review also added a total callback-read deadline and a single
+refresh retry after API authorization rejection, with tests. These are targeted
+account iterations, not three full application bug-hunt passes.
+
+Live system-browser consent, actual OS-keystore persistence on each platform,
+real Music metadata/playback/downloads, physical audio, soak, throttle, and full
+Metrolist parity tests remain unrun. Windows consent needs the user's own Desktop
+app client and interactive browser. See `docs/GOOGLE_ACCOUNT.md` for safe steps.

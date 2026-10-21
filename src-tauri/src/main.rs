@@ -1,6 +1,10 @@
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 use kyuutube_audio_spike::{Player, Snapshot};
-use std::{path::PathBuf, sync::Mutex};
+use kyuutube_youtube_account::{Account, AccountStatus, Channel, ClientConfig, Page};
+use std::{
+    path::PathBuf,
+    sync::{Arc, Mutex},
+};
 use tauri::State;
 
 struct Audio(Mutex<Option<Player>>);
@@ -47,7 +51,68 @@ fn snapshot(audio: State<Audio>) -> Result<Snapshot, String> {
     with_player(&audio, |p| Ok(p.snapshot()))
 }
 
+// Blocking network, native keyring, and browser callback work never runs on the UI thread.
+#[tauri::command]
+async fn account_status(account: State<'_, Arc<Account>>) -> Result<AccountStatus, String> {
+    let account = account.inner().clone();
+    tauri::async_runtime::spawn_blocking(move || account.status())
+        .await
+        .map_err(|_| "Account task failed")?
+}
+#[tauri::command]
+async fn configure_google(
+    account: State<'_, Arc<Account>>,
+    client_id: String,
+    client_secret: String,
+) -> Result<(), String> {
+    let account = account.inner().clone();
+    tauri::async_runtime::spawn_blocking(move || {
+        account.configure(ClientConfig {
+            client_id,
+            client_secret,
+        })
+    })
+    .await
+    .map_err(|_| "Account task failed")?
+}
+#[tauri::command]
+async fn google_sign_in(account: State<'_, Arc<Account>>) -> Result<Channel, String> {
+    let account = account.inner().clone();
+    tauri::async_runtime::spawn_blocking(move || account.sign_in())
+        .await
+        .map_err(|_| "Account task failed")?
+}
+#[tauri::command]
+fn cancel_google_sign_in(account: State<Arc<Account>>) {
+    account.cancel();
+}
+#[tauri::command]
+async fn youtube_channel(account: State<'_, Arc<Account>>) -> Result<Channel, String> {
+    let account = account.inner().clone();
+    tauri::async_runtime::spawn_blocking(move || account.channel())
+        .await
+        .map_err(|_| "Account task failed")?
+}
+#[tauri::command]
+async fn youtube_playlists(
+    account: State<'_, Arc<Account>>,
+    next_page: Option<String>,
+) -> Result<Page, String> {
+    let account = account.inner().clone();
+    tauri::async_runtime::spawn_blocking(move || account.playlists(next_page))
+        .await
+        .map_err(|_| "Account task failed")?
+}
+#[tauri::command]
+async fn disconnect_google(account: State<'_, Arc<Account>>) -> Result<(), String> {
+    let account = account.inner().clone();
+    tauri::async_runtime::spawn_blocking(move || account.disconnect())
+        .await
+        .map_err(|_| "Account task failed")?
+}
+
 fn main() {
+    let account = Arc::new(Account::new().expect("Secure Google client could not initialize"));
     tauri::Builder::default()
         .setup(|app| {
             #[cfg(target_os = "linux")]
@@ -74,12 +139,20 @@ fn main() {
             Ok(())
         })
         .manage(Audio(Mutex::new(None)))
+        .manage(account)
         .invoke_handler(tauri::generate_handler![
             play_sample,
             pause,
             seek,
             volume,
-            snapshot
+            snapshot,
+            account_status,
+            configure_google,
+            google_sign_in,
+            cancel_google_sign_in,
+            youtube_channel,
+            youtube_playlists,
+            disconnect_google
         ])
         .run(tauri::generate_context!())
         .expect("Desktop spike could not start");

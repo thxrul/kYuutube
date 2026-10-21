@@ -320,3 +320,29 @@ Retrieved during this investigation; upstream projects may change:
 The rendered ytmusicapi documentation returned HTTP 403; its upstream GitHub
 documentation sources were read instead. The initial raw wiki PO-token URL
 returned 404; the published GitHub wiki page was read successfully.
+
+
+## Metrolist request and native account iteration
+
+The user subsequently requested Metrolist's functions, explicitly added offline
+downloads, excluded Last.fm/Discord, and confirmed that system-browser OAuth
+remains required. This supersedes the earlier no-download scope but does not
+waive the memory limit, no-ad-skipping/Premium-bypass rule, or live playback gate.
+
+Metrolist reference commit `b1dd1d06722171f122ed73d7f57c127784bd959d` uses Android
+WebView cookies for its Music session. It cannot be treated as a drop-in OAuth
+backend for this desktop project. The original Rust account diagnostic now
+implements system-browser desktop OAuth (PKCE/state/temporary loopback), native
+keystore persistence, token refresh, cancellation, and disconnect/revocation.
+It attempts read-only YouTube Data API channel and playlist access; this does not
+create a Music browser session. No copied Metrolist source or branding is included.
+
+Thirteen local account tests and seven real Tauri UI checks passed; Clippy and
+the Linux release build passed. No live Google consent occurred. The updated
+Linux local-playback median was 277.40 MiB PSS / 473.07 MiB summed RSS, 1.91% of
+one core. This remains a memory-budget failure. The Music origin still returned
+CONNECT 403 in this iteration. Full client implementation, downloads, and playback
+parity remain blocked by verified service authentication/playback and the budget.
+
+See `docs/METROLIST_PARITY.md` for the feature inventory, `docs/GOOGLE_ACCOUNT.md`
+for Windows account testing, and `TEST_REPORT.md` for precise verification limits.

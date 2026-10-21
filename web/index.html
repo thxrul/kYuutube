@@ -1,11 +1,27 @@
 <!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>kYuutube feasibility</title><link rel="stylesheet" href="style.css"><script src="app.js" defer></script></head>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>kYuutube feasibility</title><link rel="stylesheet" href="style.css"><script src="app.js" defer></script><script src="account.js" defer></script></head>
 <body><nav aria-label="Navigation"><a href="#main" aria-current="page">kY</a><span>Phase 0</span></nav><main id="main">
 <header><p class="eyebrow">kYuutube · native playback investigation</p><h1>A little room<br>for listening.</h1><p>A local audio sample, a system webview, and a measurable starting point.</p></header>
-<section class="notice" aria-label="Prototype limitations"><strong>Feasibility build</strong><p>YouTube login and streaming are unverified. This prototype plays only a configured local file. It is not the finished application.</p></section>
+<section class="notice" aria-label="Prototype limitations"><strong>Feasibility build</strong><p>Browser-based Google authorization is available for testing. YouTube Music streaming and offline downloads are not available yet. Audio playback currently uses a local sample.</p></section>
+<section class="account" aria-labelledby="account-heading">
+<p class="eyebrow">Account connection</p><h2 id="account-heading">Connect through Google.</h2>
+<p>Use your system browser to authorize read-only access to your YouTube channel and playlists. This does not create a YouTube Music browser session.</p>
+<details><summary>Google Cloud setup</summary><ol>
+<li>Create a Google Cloud project and enable YouTube Data API v3.</li>
+<li>Configure the Google Auth consent screen. If the project is in testing, add your Google account as a test user.</li>
+<li>Create an OAuth client with application type <strong>Desktop app</strong>. Enter its ID and secret here.</li>
+</ol><p>Credentials stay in Windows Credential Manager, macOS Keychain, or Linux Secret Service. If the store is unavailable, connection stops. Testing grants may expire after seven days.</p></details>
+<form id="google-config" autocomplete="off">
+<label for="client-id">Desktop app client ID</label><input id="client-id" type="text" required maxlength="256" spellcheck="false" autocapitalize="none" placeholder="Your client ID ending in .apps.googleusercontent.com">
+<label for="client-secret">Desktop app client secret</label><input id="client-secret" type="password" required maxlength="256" autocomplete="off">
+<button id="save-google" type="submit">Save securely</button></form>
+<div class="account-actions"><button id="google-sign-in" disabled>Sign in with Google</button><button id="cancel-sign-in" hidden>Cancel sign-in</button><button id="disconnect-google" class="outlined" disabled>Disconnect and forget client</button></div>
+<p id="account-state" role="status" aria-live="polite">Checking the OS credential store…</p>
+<button id="load-playlists" class="outlined" disabled>Check my playlists</button><ul id="playlist-results" aria-label="Your YouTube playlists"></ul>
+</section>
 <section class="player" aria-labelledby="track"><div class="art" aria-hidden="true">♪</div><div><p class="eyebrow">Local sample</p><h2 id="track">Native audio, one step at a time.</h2><p id="state" role="status" aria-live="polite">Ready to test</p></div>
 <div class="controls"><button id="play">Play sample</button><button id="pause" disabled>Pause</button></div>
 <label for="seek">Position <output id="elapsed">0:00</output></label><input id="seek" type="range" min="0" max="1" step="0.1" value="0" disabled>
 <label for="volume">Volume</label><input id="volume" type="range" min="0" max="100" value="70" disabled></section>
-<footer>No account connected. No media downloaded. Measurements must include all webview helpers.</footer>
+<footer>No telemetry. No browser cookies imported. This is an account and local-audio diagnostic; Metrolist feature parity is still in progress.</footer>
 </main></body></html>

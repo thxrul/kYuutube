@@ -1,5 +1,5 @@
 [workspace]
-members = ["crates/audio-spike", "src-tauri"]
+members = ["crates/audio-spike", "crates/youtube-account", "src-tauri"]
 default-members = ["crates/audio-spike"]
 resolver = "2"
 

@@ -2,13 +2,26 @@ name: Publish verified alpha diagnostics
 
 on:
   workflow_dispatch:
+    inputs:
+      build_run:
+        description: Successful feasibility build run ID
+        required: true
+        default: '39502246120'
+      source_sha:
+        description: Full source commit of that build
+        required: true
+        default: '508ecab573257b3c63eac9a6398397d039c35d37'
+      tag:
+        description: New alpha tag (existing releases are never overwritten)
+        required: true
+        default: 'v0.0.1-alpha.1'
 
 permissions:
   actions: read
   contents: write
 
 concurrency:
-  group: publish-alpha-1
+  group: publish-alpha
   cancel-in-progress: false
 
 jobs:
@@ -18,9 +31,9 @@ jobs:
     env:
       GH_TOKEN: ${{ github.token }}
       GH_REPO: ${{ github.repository }}
-      ALPHA_TAG: v0.0.1-alpha.1
-      SOURCE_SHA: 508ecab573257b3c63eac9a6398397d039c35d37
-      BUILD_RUN: '39502246120'
+      ALPHA_TAG: ${{ inputs.tag }}
+      SOURCE_SHA: ${{ inputs.source_sha }}
+      BUILD_RUN: ${{ inputs.build_run }}
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
         with:
@@ -28,19 +41,20 @@ jobs:
       - name: Verify successful source build and download artifacts
         run: |
           set -euo pipefail
-          gh run view "$BUILD_RUN" --json conclusion,headSha > build-run.json
+          gh run view "$BUILD_RUN" --json conclusion,headSha,workflowName > build-run.json
           python3 - <<'PY'
           import json, os
           result = json.load(open('build-run.json'))
           assert result['conclusion'] == 'success'
           assert result['headSha'] == os.environ['SOURCE_SHA']
+          assert result['workflowName'] == 'Feasibility builds (not a release)'
           PY
           gh run download "$BUILD_RUN" --dir artifacts
-          python3 tools/package_alpha.py artifacts release-assets
+          python3 tools/package_alpha.py artifacts release-assets --source "$SOURCE_SHA" --tag "$ALPHA_TAG"
       - name: Upload complete draft then publish as prerelease
         run: |
           set -euo pipefail
-          gh release create "$ALPHA_TAG" --target "$SOURCE_SHA" --draft --prerelease --latest=false --title 'kYuutube v0.0.1-alpha.1 — Native feasibility preview' --notes-file docs/releases/v0.0.1-alpha.1.md
+          gh release create "$ALPHA_TAG" --target "$SOURCE_SHA" --draft --prerelease --latest=false --title "kYuutube $ALPHA_TAG — Feasibility preview" --notes-file "docs/releases/$ALPHA_TAG.md"
           gh release upload "$ALPHA_TAG" release-assets/*
           gh release edit "$ALPHA_TAG" --draft=false --prerelease --latest=false
       - name: Verify public assets by downloading them

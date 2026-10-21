@@ -1,14 +1,22 @@
-"""Verify and archive the four CI diagnostics for the first alpha release."""
+"""Verify and archive four CI diagnostics for an explicitly selected alpha."""
+import argparse
+import re
 from pathlib import Path
 import hashlib
 import json
-import sys
 import tarfile
 import zipfile
 
-base, out = map(Path, sys.argv[1:])
+parser = argparse.ArgumentParser(description=__doc__)
+parser.add_argument('base', type=Path)
+parser.add_argument('out', type=Path)
+parser.add_argument('--source', default='508ecab573257b3c63eac9a6398397d039c35d37')
+parser.add_argument('--tag', default='v0.0.1-alpha.1')
+args = parser.parse_args()
+if not re.fullmatch(r'[0-9a-f]{40}', args.source) or not re.fullmatch(r'v[0-9]+\.[0-9]+\.[0-9]+-alpha\.[0-9]+', args.tag):
+    raise SystemExit('Expected a full source SHA and an alpha version tag')
+base, out, source = args.base, args.out, args.source
 out.mkdir(parents=True, exist_ok=True)
-source = '508ecab573257b3c63eac9a6398397d039c35d37'
 targets = {
     'x86_64-pc-windows-msvc': 'windows-x86_64',
     'x86_64-unknown-linux-gnu': 'linux-x86_64',
@@ -27,7 +35,7 @@ for target, label in targets.items():
             raise ValueError('Unexpected artifact path')
         if hashlib.sha256((folder / name).read_bytes()).hexdigest() != expected:
             raise ValueError('Checksum mismatch: ' + name)
-    name = 'kYuutube-v0.0.1-alpha.1-' + label
+    name = 'kYuutube-' + args.tag + '-' + label
     if label.startswith('windows'):
         archive = out / (name + '.zip')
         with zipfile.ZipFile(archive, 'w', zipfile.ZIP_DEFLATED) as bundle:

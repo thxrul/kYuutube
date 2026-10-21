@@ -32,3 +32,20 @@ input[type=range] { width: 100%; min-height: 48px; accent-color: var(--md-sys-co
 footer { margin-top: 24px; font: var(--md-sys-typescale-label-large); }
 @media(max-width:599px) { body { flex-direction: column; } nav { width: 100%; flex-direction: row; border-right: 0; border-bottom: 1px solid var(--md-sys-color-outline-variant); padding: 8px 16px; } main { padding: 24px 16px; } .player { padding: 16px; grid-template-columns: 1fr; } .art { display:none; } }
 @media(prefers-reduced-motion:reduce) { button { transition: none; } }
+
+.account { margin: 32px 0; padding: 24px; background: var(--md-sys-color-surface-container); border-radius: var(--md-sys-shape-corner-extra-large); }
+.account form { display: grid; gap: 8px; margin: 24px 0; }
+.account form button { justify-self: start; margin-top: 8px; }
+.account input { min-height: 56px; min-width: 0; width: 100%; padding: 8px 16px; border: 1px solid var(--md-sys-color-on-surface-variant); border-radius: var(--md-sys-shape-corner-large); background: var(--md-sys-color-surface); color: var(--md-sys-color-on-surface); font: var(--md-sys-typescale-body-large); }
+.account input::placeholder { color: var(--md-sys-color-on-surface-variant); }
+.account-actions { display: flex; flex-wrap: wrap; gap: 8px; margin: 16px 0; }
+button.outlined { background: var(--md-sys-color-surface-container); color: var(--md-sys-color-primary); border: 1px solid var(--md-sys-color-on-surface-variant); }
+[hidden] { display: none !important; }
+summary { cursor: pointer; min-height: 48px; display: list-item; padding: 16px 0; color: var(--md-sys-color-primary); }
+.account ol { padding-left: 24px; }
+.account li { margin-bottom: 16px; }
+#playlist-results { list-style: none; margin: 16px 0 0; padding: 0; }
+#playlist-results li { padding: 16px 0; margin: 0; border-top: 1px solid var(--md-sys-color-outline-variant); overflow-wrap: anywhere; }
+#playlist-results strong, #playlist-results span { display: block; }
+#playlist-results span, #account-state { color: var(--md-sys-color-on-surface-variant); }
+@media(max-width:599px) { .account { padding: 16px; } }

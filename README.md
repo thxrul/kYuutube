@@ -3,19 +3,24 @@
 Cross-platform YouTube Music desktop client proposal, currently at **Phase 0**.
 A local-audio Tauri/Rust diagnostic exists. There is no working YouTube Music client or production release yet.
 
-Read [PHASE0_REPORT.md](PHASE0_REPORT.md) for the authentication/playback research,
-the actual probe results, the proposed architecture, and blockers. The user approved the native feasibility continuation. The current Linux
-virtual-display shell fails the memory budget; full implementation and release
-await a budget decision and a working authenticated YouTube playback spike. The user can provide Windows testing; Linux/macOS runtime validation must
-still be arranged and cannot be inferred from a successful build.
+The first [alpha diagnostic](https://github.com/thxrul/kYuutube/releases/tag/v0.0.1-alpha.1)
+contains local audio only. Source now also includes a **system-browser Google OAuth
+account diagnostic** with OS-keystore storage and read-only YouTube channel/playlist
+checks. Live account consent has not been tested. This is not yet a verified
+YouTube Music session, streaming client, or Metrolist desktop port.
 
-YouTube Music has no official public API. Any unofficial integration may break.
-No downloading, offline audio saving, ad blocking/skipping, or Premium bypass is
-implemented or planned. Ads and account entitlements must be preserved by any
-future playback integration; free-account playback is currently unverified.
-No telemetry or credential collection is implemented. The desktop diagnostic
-loads only its local UI and a configured local audio sample. The research tools make
-live requests only to YouTube/Google endpoints; package installation uses PyPI.
+Read [native account setup](docs/GOOGLE_ACCOUNT.md) and the
+[Metrolist feature inventory](docs/METROLIST_PARITY.md). The user's updated scope
+includes offline downloads and excludes Last.fm/Discord; downloads are not yet
+implemented. No ad skipping, ad blocking, or Premium bypass is implemented.
+YouTube Music has no official public API; unofficial integrations may break.
+There is no telemetry and the current account implementation talks only to Google/YouTube.
+
+[PHASE0_REPORT.md](PHASE0_REPORT.md) records actual measurements and blockers.
+The virtual Linux Tauri shell still fails the original memory budget. YouTube
+Music access is still denied by the cloud proxy, and Windows/macOS application
+runtime behavior needs validation. A successful compile, OAuth protocol test,
+or YouTube Data API query does not establish Music playback or feature parity.
 
 ## Reproduce the anonymous feasibility checks
 
@@ -35,9 +40,7 @@ Results contain no access tokens, cookies, stream URLs, or provider response
 bodies. The tool never imports browser cookies or downloads media. Preserve the
 host's proxy and CA settings; do not disable TLS checks to run it.
 
-No Google client is needed for these anonymous checks. Do not put credentials in
-the checkout or chat. Google Cloud setup and secure first-run authorization
-instructions will depend on the architecture decision recorded in the report.
+No Google client is needed for these anonymous checks. For the separate desktop account diagnostic, follow [the Google Cloud setup guide](docs/GOOGLE_ACCOUNT.md). Do not put credentials in the checkout or chat.
 
 ## Native diagnostic
 

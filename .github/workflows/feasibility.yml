@@ -12,6 +12,7 @@ on:
       - 'tools/package_spike.py'
       - 'tools/make_sample.py'
       - 'tools/Measure-ProcessTree.ps1'
+      - 'tools/package_alpha.py'
       - 'docs/FEASIBILITY_BUILD.md'
   pull_request:
   workflow_dispatch:
@@ -68,6 +69,14 @@ jobs:
       - name: Compile the feasibility executables
         shell: bash
         run: cargo +1.92.0 build --release --locked --workspace --target ${{ matrix.target }}
+      - name: Account OAuth tests on native targets (no real Google credentials)
+        shell: bash
+        run: |
+          if [ "$(rustc +1.92.0 -vV | sed -n 's/^host: //p')" = '${{ matrix.target }}' ]; then
+            cargo +1.92.0 test --locked -p kyuutube-youtube-account --target ${{ matrix.target }}
+          else
+            echo 'Cross-compiled target: account tests require a matching runner.'
+          fi
       - name: Linux native integration tests
         if: runner.os == 'Linux'
         shell: bash

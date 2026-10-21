@@ -21,3 +21,13 @@ Missing before a final audit: light theme, three contrast levels, album-art dyna
 color/caching/off-thread computation, full navigation and player views, actual
 contrast measurements, keyboard and screen-reader checks, and minimized-window
 behavior across OSs. No final category scores or compliance pass are assigned.
+
+
+Account-screen iteration: inspected the actual WebKitGTK screenshot in
+`reports/account-desktop.png` and the seven-check UI report. New text fields use
+color/shape/type tokens, labels, a password field, 56px input height, and visible
+focus. Buttons retain 48px minimum height and wrap on compact widths. API metadata
+uses textContent; secret values are not rendered or stored in localStorage.
+Compact/wide overflow checks passed. This is still a diagnostic; light/dynamic
+schemes, contrast modes, complete navigation, and full keyboard/screen-reader
+validation are outstanding. No final audit pass or full-client score is claimed.

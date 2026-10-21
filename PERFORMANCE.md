@@ -78,3 +78,19 @@ Screenshots confirm the local UI still renders. No hardware device or network
 playback check follows from these results. CPU passes this short unthrottled
 comparison; memory remains above budget under both metrics. No performance pass
 or completed architecture is declared.
+
+
+## Native account diagnostic iteration
+
+Short virtual Linux measurements after adding the account screen, with WebKit
+Never policy and prelaunch compositing switch (not default/physical GPU behavior):
+
+| State | Median summed RSS MiB | Median PSS MiB | CPU % of one core |
+| --- | ---: | ---: | ---: |
+| Visible idle, automated | 429.11 | 235.78 | 0.42 |
+| Local WAV playback, automated | 473.07 | 277.40 | 1.91 |
+
+Evidence: `reports/account-desktop.json`. The entire app/helper tree is measured;
+external test infrastructure is excluded. Memory still fails the original target.
+This does not measure live Google consent, real YouTube playback, downloads,
+Windows/macOS behavior, or the two-hour soak/throttle requirements.

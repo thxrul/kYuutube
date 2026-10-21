@@ -113,6 +113,19 @@ def main():
 
         assert execute("return document.title") == "kYuutube feasibility"
         report["checks"].append("Local UI loaded in the actual Tauri system webview")
+        assert execute("return !!document.querySelector('#google-config') && document.querySelector('#client-secret').type === 'password'")
+        execute("document.querySelector('#client-id').value='invalid-client';document.querySelector('#client-secret').value='fixture-secret-never-persist'")
+        click("#save-google")
+        deadline = time.monotonic() + 5
+        while time.monotonic() < deadline:
+            text = execute("return document.querySelector('#account-state').textContent")
+            if 'Desktop app' in text:
+                break
+            time.sleep(0.1)
+        assert 'Desktop app' in text, text
+        assert execute("return document.querySelector('#client-secret').value === '' && document.querySelector('#google-sign-in').disabled")
+        assert execute("return localStorage.length === 0 && !document.body.textContent.includes('fixture-secret-never-persist')")
+        report["checks"].append("Actual account IPC rejected an invalid client, cleared the secret field, and left no localStorage credentials")
         process = app_process()
         time.sleep(4)
         report["stages"]["idle"] = measure(process, 10)
