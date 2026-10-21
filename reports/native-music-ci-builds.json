@@ -1,0 +1,280 @@
+{
+  "source_commit": "97467add71a13736569e081c069ec698c845f1d2",
+  "run_url": "https://github.com/thxrul/kYuutube/actions/runs/39575217341",
+  "conclusion": "success",
+  "targets": [
+    {
+      "target": "aarch64-apple-darwin",
+      "compilation": "passed",
+      "account_music_tests": {
+        "passed": 29,
+        "failed": 0
+      },
+      "ui_state_tests": {
+        "passed": 14,
+        "failed": 0
+      },
+      "publication_gate_tests": {
+        "passed": 3,
+        "failed": 0
+      },
+      "publisher_oauth_configured": false,
+      "native_music_playback_verified": false,
+      "bundled_mpv": false,
+      "manifest": [
+        {
+          "name": "kyuutube-desktop-spike",
+          "bytes": 7083648,
+          "sha256": "f3be8a1b64ea0e004b2460d68ee940cd2e0e0ab0d7f2ae90d6be5326ce494f15"
+        },
+        {
+          "name": "kyuutube-audio-spike",
+          "bytes": 402656,
+          "sha256": "fb2d4a8e87a4e6c9982c2f70037abadc5e4a970db8f199c70632517f1b686a33"
+        },
+        {
+          "name": "tone.wav",
+          "bytes": 2880044,
+          "sha256": "135da730d31bd1f16acef311ffb44c2b1ec5a1a48753bfc41f0cf27f72e30db4"
+        },
+        {
+          "name": "README.md",
+          "bytes": 3252,
+          "sha256": "0a895a0dd0dec3cbfe2ce524550622a71f723a15ec8e76e39ea7b3da2b5e71ef"
+        },
+        {
+          "name": "ROBOTO_FLEX_LICENSE.txt",
+          "bytes": 4394,
+          "sha256": "9d1e34d7081410f85bc1bf4805ce076a16fb1a2306661aef9a7bee72fffb5e23"
+        },
+        {
+          "name": "BUILD_INFO.json",
+          "bytes": 474,
+          "sha256": "05841e67c9865e25d2868ca3df6081eeb400c8474877eacce5a83356352020be"
+        },
+        {
+          "name": "Measure-ProcessTree.ps1",
+          "bytes": 4273,
+          "sha256": "73145562d439c42618e35489cc51c098cdc803b6e23a36e5ef7e5397dc6a44ef"
+        },
+        {
+          "name": "GOOGLE_ACCOUNT.md",
+          "bytes": 667,
+          "sha256": "17054b36d09ef683317ca8b9dc2469add4e592fd3bd2c564543c0503d4d1c562"
+        },
+        {
+          "name": "METROLIST_PARITY.md",
+          "bytes": 7234,
+          "sha256": "461ee1da35b9a6fe1be2a83333be7bf2b7d93d13632223f438926e5799fc61c8"
+        }
+      ]
+    },
+    {
+      "target": "x86_64-apple-darwin",
+      "compilation": "passed",
+      "account_music_tests": {
+        "status": "not_executed_cross_compiled"
+      },
+      "ui_state_tests": {
+        "passed": 14,
+        "failed": 0
+      },
+      "publication_gate_tests": {
+        "passed": 3,
+        "failed": 0
+      },
+      "publisher_oauth_configured": false,
+      "native_music_playback_verified": false,
+      "bundled_mpv": false,
+      "manifest": [
+        {
+          "name": "kyuutube-desktop-spike",
+          "bytes": 7596804,
+          "sha256": "cf3fe1f3bdb135926a3bba531a13de68c5f2067859cef2f389e2203c0e56e3a3"
+        },
+        {
+          "name": "kyuutube-audio-spike",
+          "bytes": 404000,
+          "sha256": "b76eeca4eebdeb77a9bcc3f6a959e5d5f7fb8ef1c258557b21b002b67b8593cf"
+        },
+        {
+          "name": "tone.wav",
+          "bytes": 2880044,
+          "sha256": "135da730d31bd1f16acef311ffb44c2b1ec5a1a48753bfc41f0cf27f72e30db4"
+        },
+        {
+          "name": "README.md",
+          "bytes": 3252,
+          "sha256": "0a895a0dd0dec3cbfe2ce524550622a71f723a15ec8e76e39ea7b3da2b5e71ef"
+        },
+        {
+          "name": "ROBOTO_FLEX_LICENSE.txt",
+          "bytes": 4394,
+          "sha256": "9d1e34d7081410f85bc1bf4805ce076a16fb1a2306661aef9a7bee72fffb5e23"
+        },
+        {
+          "name": "BUILD_INFO.json",
+          "bytes": 473,
+          "sha256": "aacd0f69f2a57a49bbdee2fee6e20ca1db971dfea5012d0ff70f1e5027ceaa9f"
+        },
+        {
+          "name": "Measure-ProcessTree.ps1",
+          "bytes": 4273,
+          "sha256": "73145562d439c42618e35489cc51c098cdc803b6e23a36e5ef7e5397dc6a44ef"
+        },
+        {
+          "name": "GOOGLE_ACCOUNT.md",
+          "bytes": 667,
+          "sha256": "17054b36d09ef683317ca8b9dc2469add4e592fd3bd2c564543c0503d4d1c562"
+        },
+        {
+          "name": "METROLIST_PARITY.md",
+          "bytes": 7234,
+          "sha256": "461ee1da35b9a6fe1be2a83333be7bf2b7d93d13632223f438926e5799fc61c8"
+        }
+      ]
+    },
+    {
+      "target": "x86_64-pc-windows-msvc",
+      "compilation": "passed",
+      "account_music_tests": {
+        "passed": 29,
+        "failed": 0
+      },
+      "ui_state_tests": {
+        "passed": 14,
+        "failed": 0
+      },
+      "publication_gate_tests": {
+        "passed": 3,
+        "failed": 0
+      },
+      "publisher_oauth_configured": false,
+      "native_music_playback_verified": false,
+      "bundled_mpv": false,
+      "manifest": [
+        {
+          "name": "kyuutube-desktop-spike.exe",
+          "bytes": 10154496,
+          "sha256": "4bddc2e8b3909484bd447cc45e323a9a3df5e251b37bb8a1ba89915bfacd0398"
+        },
+        {
+          "name": "kyuutube-audio-spike.exe",
+          "bytes": 229888,
+          "sha256": "4ff3b3cd8a36dce7e3369c78e77c34c6fa864c988422ac0caec511c04e63baf7"
+        },
+        {
+          "name": "tone.wav",
+          "bytes": 2880044,
+          "sha256": "135da730d31bd1f16acef311ffb44c2b1ec5a1a48753bfc41f0cf27f72e30db4"
+        },
+        {
+          "name": "README.md",
+          "bytes": 3317,
+          "sha256": "59c026fd2f8607db003335f52a0f0954658edf3801d046bf34ca3e13d60fa3a7"
+        },
+        {
+          "name": "ROBOTO_FLEX_LICENSE.txt",
+          "bytes": 4487,
+          "sha256": "39f06f6fe4b34531b624a17334d5ab327d3d3808f5e5c649c0b00baf6191529d"
+        },
+        {
+          "name": "BUILD_INFO.json",
+          "bytes": 486,
+          "sha256": "6bb4fbc35e8919e877ba76dac1bd1a64abbe8c557604ea083a520e6eaceb0522"
+        },
+        {
+          "name": "Measure-ProcessTree.ps1",
+          "bytes": 4366,
+          "sha256": "d50a29677ae281f724a033fc80f26248447e895b610a45d1a376226730237e07"
+        },
+        {
+          "name": "GOOGLE_ACCOUNT.md",
+          "bytes": 682,
+          "sha256": "b74730e205f17c4ea83d3a6d18c47a9d36d0040601327fc13ad7ebff0ecfe9ce"
+        },
+        {
+          "name": "METROLIST_PARITY.md",
+          "bytes": 7298,
+          "sha256": "c24dae16cd96f1a0ae8563b3ee35ba7b49e9280a90e70e3200ae25dae4b62462"
+        }
+      ]
+    },
+    {
+      "target": "x86_64-unknown-linux-gnu",
+      "compilation": "passed",
+      "account_music_tests": {
+        "passed": 29,
+        "failed": 0
+      },
+      "ui_state_tests": {
+        "passed": 14,
+        "failed": 0
+      },
+      "publication_gate_tests": {
+        "passed": 3,
+        "failed": 0
+      },
+      "publisher_oauth_configured": false,
+      "native_music_playback_verified": false,
+      "bundled_mpv": false,
+      "manifest": [
+        {
+          "name": "kyuutube-desktop-spike",
+          "bytes": 8603704,
+          "sha256": "15055f24d2f4ca360e3557dde60b8988f6cf90f145a0a38e26a81a8f9e7b19d4"
+        },
+        {
+          "name": "kyuutube-audio-spike",
+          "bytes": 419496,
+          "sha256": "a5eb8cf7673e01d5a5d5bda911cb1b0bd28e0960aaf61b5d3e0675d6024cf4bc"
+        },
+        {
+          "name": "tone.wav",
+          "bytes": 2880044,
+          "sha256": "135da730d31bd1f16acef311ffb44c2b1ec5a1a48753bfc41f0cf27f72e30db4"
+        },
+        {
+          "name": "README.md",
+          "bytes": 3252,
+          "sha256": "0a895a0dd0dec3cbfe2ce524550622a71f723a15ec8e76e39ea7b3da2b5e71ef"
+        },
+        {
+          "name": "ROBOTO_FLEX_LICENSE.txt",
+          "bytes": 4394,
+          "sha256": "9d1e34d7081410f85bc1bf4805ce076a16fb1a2306661aef9a7bee72fffb5e23"
+        },
+        {
+          "name": "BUILD_INFO.json",
+          "bytes": 478,
+          "sha256": "9bbe0d54de16b09f6dc0a5bf42d0dfd03297fcd516aa41e4bf607d419256e878"
+        },
+        {
+          "name": "Measure-ProcessTree.ps1",
+          "bytes": 4273,
+          "sha256": "73145562d439c42618e35489cc51c098cdc803b6e23a36e5ef7e5397dc6a44ef"
+        },
+        {
+          "name": "GOOGLE_ACCOUNT.md",
+          "bytes": 667,
+          "sha256": "17054b36d09ef683317ca8b9dc2469add4e592fd3bd2c564543c0503d4d1c562"
+        },
+        {
+          "name": "METROLIST_PARITY.md",
+          "bytes": 7234,
+          "sha256": "461ee1da35b9a6fe1be2a83333be7bf2b7d93d13632223f438926e5799fc61c8"
+        }
+      ]
+    }
+  ],
+  "linux_native_audio_integration_tests": {
+    "passed": 4,
+    "failed": 0,
+    "audio": "generated local WAV and loopback HTTP WAV, null output"
+  },
+  "actual_google_music_playback": "not_verified",
+  "publisher_configuration": "not_provided_in_this_build",
+  "release_packaging": "rejected_actual_ci_artifacts",
+  "new_release_published": false,
+  "release_hold": "user requires working native Music before publishing"
+}

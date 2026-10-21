@@ -61,5 +61,13 @@
     "Native audio runtime not bundled for portable releases",
     "Linux webview memory budget still fails",
     "Offline downloads, full Metrolist parity, soak/throttle/platform suites unfinished"
-  ]
+  ],
+  "ci": {
+    "source_commit": "97467add71a13736569e081c069ec698c845f1d2",
+    "run_url": "https://github.com/thxrul/kYuutube/actions/runs/39575217341",
+    "all_four_compiles_passed": true,
+    "publisher_oauth_configured": false,
+    "native_music_playback_verified": false,
+    "new_release_published": false
+  }
 }

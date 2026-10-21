@@ -197,3 +197,21 @@ Live browser consent, Music OAuth compatibility, real stream playback, ads and
 entitlements, physical audio/device recovery, native runtime bundling, soak,
 platform/throttle suites, and full Metrolist parity remain unverified or unfinished.
 No new release was published. See `reports/native-music-status.json`.
+
+
+Source `97467add71a13736569e081c069ec698c845f1d2` passed
+[four-platform CI run 39575217341](https://github.com/thxrul/kYuutube/actions/runs/39575217341).
+The 29 account/Music protocol tests executed and passed on Windows x64, Linux x64,
+and Apple Silicon macOS; Intel macOS was cross-compiled without executing them.
+All four jobs passed 14 frontend state tests and 3 publication-gate tests. Linux
+also passed all 4 native audio integration tests; Windows passed its process-tree
+helper check. All nine artifact manifest entries per target matched, and desktop
+binary architectures matched their labels.
+
+All four CI builds report `publisher_oauth_configured: false` and
+`native_music_playback_verified: false`; libmpv is not bundled. Running the actual
+release packager on these downloaded artifacts failed as intended, creating no
+release archives. No GitHub Release publication was attempted. Complete evidence:
+`reports/native-music-ci-builds.json`. The publisher must supply the app-owned
+registration once; end users will not enter it. Live Music compatibility, real
+track playback, and portable runtime packaging remain required before publication.
