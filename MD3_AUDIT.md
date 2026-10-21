@@ -31,3 +31,10 @@ uses textContent; secret values are not rendered or stored in localStorage.
 Compact/wide overflow checks passed. This is still a diagnostic; light/dynamic
 schemes, contrast modes, complete navigation, and full keyboard/screen-reader
 validation are outstanding. No final audit pass or full-client score is claimed.
+
+
+Calculated sRGB contrast ratios for the account screen's declared opaque token
+pairs: on-surface/surface **14.35:1**, on-surface-variant/surface-container
+**9.56:1**, on-primary/primary **7.71:1**, and primary/surface-container **9.56:1**.
+These normal text pairs exceed 4.5:1; this calculation does not substitute for a
+complete screen-reader, focus, theming, or dynamic-content audit.

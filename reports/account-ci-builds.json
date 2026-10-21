@@ -1,0 +1,274 @@
+{
+  "source_commit": "14cc092589f06412ae66353aff304f97fc40e515",
+  "ci_run_url": "https://github.com/thxrul/kYuutube/actions/runs/39567857094",
+  "ci_conclusion": "success",
+  "targets": [
+    {
+      "target": "aarch64-apple-darwin",
+      "compile": "passed",
+      "account_tests": {
+        "passed": 13,
+        "failed": 0
+      },
+      "manifest_entries_verified": [
+        {
+          "name": "kyuutube-desktop-spike",
+          "sha256": "e9fd92ff73e41375e4bf49b01141a4bf795169920dba0cc9a742ce9a1bf0fe61",
+          "bytes": 6983824
+        },
+        {
+          "name": "kyuutube-audio-spike",
+          "sha256": "43fe85cddcaf79407aa59bff460a333176ca4230bbc71120305301ca567b1b4b",
+          "bytes": 402656
+        },
+        {
+          "name": "tone.wav",
+          "sha256": "135da730d31bd1f16acef311ffb44c2b1ec5a1a48753bfc41f0cf27f72e30db4",
+          "bytes": 2880044
+        },
+        {
+          "name": "README.md",
+          "sha256": "3882b079defd7e55150f34284d9d82d5e44eb9931ea48dec73e946cf3f09e890",
+          "bytes": 3086
+        },
+        {
+          "name": "ROBOTO_FLEX_LICENSE.txt",
+          "sha256": "9d1e34d7081410f85bc1bf4805ce076a16fb1a2306661aef9a7bee72fffb5e23",
+          "bytes": 4394
+        },
+        {
+          "name": "BUILD_INFO.json",
+          "sha256": "c343255ab205efbadc8045a486be0c9528000068ac3f1d2d43fec232d2dad0ac",
+          "bytes": 327
+        },
+        {
+          "name": "Measure-ProcessTree.ps1",
+          "sha256": "73145562d439c42618e35489cc51c098cdc803b6e23a36e5ef7e5397dc6a44ef",
+          "bytes": 4273
+        },
+        {
+          "name": "GOOGLE_ACCOUNT.md",
+          "sha256": "b0318a21e5106ebf8525993a850a10433e9bfeee13e8534d9c44d4366fff550a",
+          "bytes": 3815
+        },
+        {
+          "name": "METROLIST_PARITY.md",
+          "sha256": "f241c3f856583e96fe8ccd3035cc06cbd57cc448afc2bea206bd4dd884241bca",
+          "bytes": 6438
+        }
+      ],
+      "application_gui_and_audio_on_platform": "not_tested",
+      "actual_os_keystore_and_google_consent": "not_tested"
+    },
+    {
+      "target": "x86_64-apple-darwin",
+      "compile": "passed",
+      "account_tests": {
+        "status": "not_executed_cross_compiled"
+      },
+      "manifest_entries_verified": [
+        {
+          "name": "kyuutube-desktop-spike",
+          "sha256": "624458b9cd6f09bbc0687e2b09017193e3847f99e71bbb0a75bdccf67cda0f76",
+          "bytes": 7493560
+        },
+        {
+          "name": "kyuutube-audio-spike",
+          "sha256": "a0da995c5ae526f4d95d748cfca695f1323985634f1e41324b3b7ee4d039df57",
+          "bytes": 404000
+        },
+        {
+          "name": "tone.wav",
+          "sha256": "135da730d31bd1f16acef311ffb44c2b1ec5a1a48753bfc41f0cf27f72e30db4",
+          "bytes": 2880044
+        },
+        {
+          "name": "README.md",
+          "sha256": "3882b079defd7e55150f34284d9d82d5e44eb9931ea48dec73e946cf3f09e890",
+          "bytes": 3086
+        },
+        {
+          "name": "ROBOTO_FLEX_LICENSE.txt",
+          "sha256": "9d1e34d7081410f85bc1bf4805ce076a16fb1a2306661aef9a7bee72fffb5e23",
+          "bytes": 4394
+        },
+        {
+          "name": "BUILD_INFO.json",
+          "sha256": "ac35536ce7d665f122b4f3e83a952619d9996e0a3ea47b24170edd00d03d324e",
+          "bytes": 326
+        },
+        {
+          "name": "Measure-ProcessTree.ps1",
+          "sha256": "73145562d439c42618e35489cc51c098cdc803b6e23a36e5ef7e5397dc6a44ef",
+          "bytes": 4273
+        },
+        {
+          "name": "GOOGLE_ACCOUNT.md",
+          "sha256": "b0318a21e5106ebf8525993a850a10433e9bfeee13e8534d9c44d4366fff550a",
+          "bytes": 3815
+        },
+        {
+          "name": "METROLIST_PARITY.md",
+          "sha256": "f241c3f856583e96fe8ccd3035cc06cbd57cc448afc2bea206bd4dd884241bca",
+          "bytes": 6438
+        }
+      ],
+      "application_gui_and_audio_on_platform": "not_tested",
+      "actual_os_keystore_and_google_consent": "not_tested"
+    },
+    {
+      "target": "x86_64-pc-windows-msvc",
+      "compile": "passed",
+      "account_tests": {
+        "passed": 13,
+        "failed": 0
+      },
+      "manifest_entries_verified": [
+        {
+          "name": "kyuutube-desktop-spike.exe",
+          "sha256": "d5d6e8c0d50cf94f0aa25766f70dfad801aa412559d629076e9fb434778a0b0d",
+          "bytes": 10022912
+        },
+        {
+          "name": "kyuutube-audio-spike.exe",
+          "sha256": "1a62ba3deb98bbe4e23bf12fb8a024c3f274dd2c84f0bbff094d6287ce71f34e",
+          "bytes": 229376
+        },
+        {
+          "name": "tone.wav",
+          "sha256": "135da730d31bd1f16acef311ffb44c2b1ec5a1a48753bfc41f0cf27f72e30db4",
+          "bytes": 2880044
+        },
+        {
+          "name": "README.md",
+          "sha256": "bf29784deafa8e81ff49a0feadc4377a029bebd0e1d243b5025f14290f0ef0f9",
+          "bytes": 3148
+        },
+        {
+          "name": "ROBOTO_FLEX_LICENSE.txt",
+          "sha256": "39f06f6fe4b34531b624a17334d5ab327d3d3808f5e5c649c0b00baf6191529d",
+          "bytes": 4487
+        },
+        {
+          "name": "BUILD_INFO.json",
+          "sha256": "a09f2f87029437badcd166a1379458f809cda48b0e0ec41f21764d28a112c97a",
+          "bytes": 336
+        },
+        {
+          "name": "Measure-ProcessTree.ps1",
+          "sha256": "d50a29677ae281f724a033fc80f26248447e895b610a45d1a376226730237e07",
+          "bytes": 4366
+        },
+        {
+          "name": "GOOGLE_ACCOUNT.md",
+          "sha256": "909ec62d50f21e1068abcb7e8ae7989692137af0a2833477f5098a684c35d8c0",
+          "bytes": 3842
+        },
+        {
+          "name": "METROLIST_PARITY.md",
+          "sha256": "e4d2339b3c2e9567aadc3a24426d23eab983a3445f866ae0ce2b6c66ba7192f1",
+          "bytes": 6494
+        }
+      ],
+      "application_gui_and_audio_on_platform": "not_tested",
+      "actual_os_keystore_and_google_consent": "not_tested"
+    },
+    {
+      "target": "x86_64-unknown-linux-gnu",
+      "compile": "passed",
+      "account_tests": {
+        "passed": 13,
+        "failed": 0
+      },
+      "manifest_entries_verified": [
+        {
+          "name": "kyuutube-desktop-spike",
+          "sha256": "28fd071a6abd30a63ee9129b0ca17e3b7d378beebafd6d5ca8a4f2dd76b77b58",
+          "bytes": 8493848
+        },
+        {
+          "name": "kyuutube-audio-spike",
+          "sha256": "4559ac15e729fe483d8649c254c46576a21877c4c70382072c2b71a3c7cb138e",
+          "bytes": 419160
+        },
+        {
+          "name": "tone.wav",
+          "sha256": "135da730d31bd1f16acef311ffb44c2b1ec5a1a48753bfc41f0cf27f72e30db4",
+          "bytes": 2880044
+        },
+        {
+          "name": "README.md",
+          "sha256": "3882b079defd7e55150f34284d9d82d5e44eb9931ea48dec73e946cf3f09e890",
+          "bytes": 3086
+        },
+        {
+          "name": "ROBOTO_FLEX_LICENSE.txt",
+          "sha256": "9d1e34d7081410f85bc1bf4805ce076a16fb1a2306661aef9a7bee72fffb5e23",
+          "bytes": 4394
+        },
+        {
+          "name": "BUILD_INFO.json",
+          "sha256": "d010fedd7200ec68e8440e0f3cfb2cd5f154b2f6766def91f19d1cacf8587c3d",
+          "bytes": 331
+        },
+        {
+          "name": "Measure-ProcessTree.ps1",
+          "sha256": "73145562d439c42618e35489cc51c098cdc803b6e23a36e5ef7e5397dc6a44ef",
+          "bytes": 4273
+        },
+        {
+          "name": "GOOGLE_ACCOUNT.md",
+          "sha256": "b0318a21e5106ebf8525993a850a10433e9bfeee13e8534d9c44d4366fff550a",
+          "bytes": 3815
+        },
+        {
+          "name": "METROLIST_PARITY.md",
+          "sha256": "f241c3f856583e96fe8ccd3035cc06cbd57cc448afc2bea206bd4dd884241bca",
+          "bytes": 6438
+        }
+      ],
+      "application_gui_and_audio_on_platform": "local_virtual_linux_only",
+      "actual_os_keystore_and_google_consent": "not_tested"
+    }
+  ],
+  "linux_native_audio_tests": {
+    "passed": 2,
+    "failed": 0
+  },
+  "linux_virtual_ui_checks": {
+    "passed": 7,
+    "failed": 0
+  },
+  "release": {
+    "url": "https://github.com/thxrul/kYuutube/releases/tag/v0.0.1-alpha.2",
+    "prerelease": true,
+    "draft": false,
+    "assets": [
+      {
+        "name": "kYuutube-v0.0.1-alpha.2-linux-x86_64.tar.gz",
+        "bytes": 3345258
+      },
+      {
+        "name": "kYuutube-v0.0.1-alpha.2-macos-arm64.tar.gz",
+        "bytes": 2986516
+      },
+      {
+        "name": "kYuutube-v0.0.1-alpha.2-macos-x86_64.tar.gz",
+        "bytes": 3169315
+      },
+      {
+        "name": "kYuutube-v0.0.1-alpha.2-windows-x86_64.zip",
+        "bytes": 3354938
+      },
+      {
+        "name": "SHA256SUMS.txt",
+        "bytes": 438
+      }
+    ],
+    "download_and_checksum_validation": "passed_in_publication_workflow",
+    "publication_run_url": "https://github.com/thxrul/kYuutube/actions/runs/39568674518"
+  },
+  "youtube_music_session_streaming_and_downloads": "not_implemented_or_live_validated",
+  "memory_budget": "failed",
+  "production_release": false
+}

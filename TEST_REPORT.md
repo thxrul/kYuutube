@@ -124,3 +124,20 @@ Live system-browser consent, actual OS-keystore persistence on each platform,
 real Music metadata/playback/downloads, physical audio, soak, throttle, and full
 Metrolist parity tests remain unrun. Windows consent needs the user's own Desktop
 app client and interactive browser. See `docs/GOOGLE_ACCOUNT.md` for safe steps.
+
+
+The account source at `14cc092589f06412ae66353aff304f97fc40e515` passed
+[four-platform build run 39567857094](https://github.com/thxrul/kYuutube/actions/runs/39567857094).
+Thirteen account tests executed and passed on each of Windows x64, Linux x64,
+and macOS Apple Silicon. Intel macOS was cross-compiled and did not execute the
+tests. Linux's two native audio tests passed, and Windows's process-tree helper
+check passed. All nine manifest entries per target were verified after download,
+and the desktop executable architectures matched their labels. This does not
+validate Google consent, platform keychain persistence, or Windows/macOS GUI/audio.
+
+[Alpha 2](https://github.com/thxrul/kYuutube/releases/tag/v0.0.1-alpha.2) was
+published as an unsigned diagnostic prerelease from that exact source commit.
+The publication workflow downloaded all public release assets and verified the
+four archive SHA-256 hashes. See `reports/account-ci-builds.json`. Full Music
+login/playback, offline downloads, final audits, and production release gates
+remain outstanding.
