@@ -1,0 +1,236 @@
+{
+  "source_commit": "027d55ba47aa01cca6ce625de92b47ed1d75ae52",
+  "ci_run": "https://github.com/thxrul/kYuutube/actions/runs/40240424065",
+  "all_four_builds": "passed",
+  "backend_tests": 33,
+  "ui_state_tests": 19,
+  "packaging_tests": 4,
+  "windows_cookie_chunk_ascii_bytes": 1024,
+  "windows_cookie_chunk_utf16_bytes_max": 2048,
+  "riff_reference": "d03b2833b07420e609276937a694d9b3254009c0",
+  "targets": [
+    {
+      "target": "aarch64-apple-darwin",
+      "compile": "passed",
+      "mode": "native-music-session",
+      "manifest": [
+        {
+          "name": "kyuutube-desktop-spike",
+          "sha256": "9e9fc30b83aa40bbaa98ab94b033d8b6f115df497890cdc98193af8b9a9fc241",
+          "bytes": 7166656
+        },
+        {
+          "name": "kyuutube-audio-spike",
+          "sha256": "fb2d4a8e87a4e6c9982c2f70037abadc5e4a970db8f199c70632517f1b686a33",
+          "bytes": 402656
+        },
+        {
+          "name": "tone.wav",
+          "sha256": "135da730d31bd1f16acef311ffb44c2b1ec5a1a48753bfc41f0cf27f72e30db4",
+          "bytes": 2880044
+        },
+        {
+          "name": "README.md",
+          "sha256": "79e27b67af454973f524f62059aea416a27df4ad9f022b50045fe36dfeda6aaf",
+          "bytes": 1833
+        },
+        {
+          "name": "ROBOTO_FLEX_LICENSE.txt",
+          "sha256": "9d1e34d7081410f85bc1bf4805ce076a16fb1a2306661aef9a7bee72fffb5e23",
+          "bytes": 4394
+        },
+        {
+          "name": "BUILD_INFO.json",
+          "sha256": "2ad6edf69c8c2e76953490891f94c372e96c92c07ff8d159ebddf48d63348bf9",
+          "bytes": 512
+        },
+        {
+          "name": "Measure-ProcessTree.ps1",
+          "sha256": "73145562d439c42618e35489cc51c098cdc803b6e23a36e5ef7e5397dc6a44ef",
+          "bytes": 4273
+        },
+        {
+          "name": "GOOGLE_ACCOUNT.md",
+          "sha256": "0f3efefb532aff6425530f8a0b68fe2e1fb57f86c6303a20aa12738ad38ad014",
+          "bytes": 832
+        },
+        {
+          "name": "METROLIST_PARITY.md",
+          "sha256": "461ee1da35b9a6fe1be2a83333be7bf2b7d93d13632223f438926e5799fc61c8",
+          "bytes": 7234
+        }
+      ],
+      "live_google_signin_and_playback": "not_verified",
+      "bundled_mpv": false
+    },
+    {
+      "target": "x86_64-apple-darwin",
+      "compile": "passed",
+      "mode": "native-music-session",
+      "manifest": [
+        {
+          "name": "kyuutube-desktop-spike",
+          "sha256": "331545ccadba39e3bd1249848895b6babfd60f81560eb65709b398904d7ca141",
+          "bytes": 7679156
+        },
+        {
+          "name": "kyuutube-audio-spike",
+          "sha256": "b76eeca4eebdeb77a9bcc3f6a959e5d5f7fb8ef1c258557b21b002b67b8593cf",
+          "bytes": 404000
+        },
+        {
+          "name": "tone.wav",
+          "sha256": "135da730d31bd1f16acef311ffb44c2b1ec5a1a48753bfc41f0cf27f72e30db4",
+          "bytes": 2880044
+        },
+        {
+          "name": "README.md",
+          "sha256": "79e27b67af454973f524f62059aea416a27df4ad9f022b50045fe36dfeda6aaf",
+          "bytes": 1833
+        },
+        {
+          "name": "ROBOTO_FLEX_LICENSE.txt",
+          "sha256": "9d1e34d7081410f85bc1bf4805ce076a16fb1a2306661aef9a7bee72fffb5e23",
+          "bytes": 4394
+        },
+        {
+          "name": "BUILD_INFO.json",
+          "sha256": "c62bcabb4c385bd05dde4b759c677dcca789fc94f3a1df95cef8f6eca13832b4",
+          "bytes": 511
+        },
+        {
+          "name": "Measure-ProcessTree.ps1",
+          "sha256": "73145562d439c42618e35489cc51c098cdc803b6e23a36e5ef7e5397dc6a44ef",
+          "bytes": 4273
+        },
+        {
+          "name": "GOOGLE_ACCOUNT.md",
+          "sha256": "0f3efefb532aff6425530f8a0b68fe2e1fb57f86c6303a20aa12738ad38ad014",
+          "bytes": 832
+        },
+        {
+          "name": "METROLIST_PARITY.md",
+          "sha256": "461ee1da35b9a6fe1be2a83333be7bf2b7d93d13632223f438926e5799fc61c8",
+          "bytes": 7234
+        }
+      ],
+      "live_google_signin_and_playback": "not_verified",
+      "bundled_mpv": false
+    },
+    {
+      "target": "x86_64-pc-windows-msvc",
+      "compile": "passed",
+      "mode": "native-music-session",
+      "manifest": [
+        {
+          "name": "kyuutube-desktop-spike.exe",
+          "sha256": "c3f88b6560a81d0e0d7064020fdb1005406e3595c80b7c81cad65ddf5f1cf42f",
+          "bytes": 10275840
+        },
+        {
+          "name": "kyuutube-audio-spike.exe",
+          "sha256": "f292ec677878e1ea830f521ce14ecabd907b1017e7da2097f6a933f005634796",
+          "bytes": 229888
+        },
+        {
+          "name": "tone.wav",
+          "sha256": "135da730d31bd1f16acef311ffb44c2b1ec5a1a48753bfc41f0cf27f72e30db4",
+          "bytes": 2880044
+        },
+        {
+          "name": "README.md",
+          "sha256": "ee9c72bd6032fe36371396c74b0abec6db33dd206dae9d804fc792d41875acdd",
+          "bytes": 1862
+        },
+        {
+          "name": "ROBOTO_FLEX_LICENSE.txt",
+          "sha256": "39f06f6fe4b34531b624a17334d5ab327d3d3808f5e5c649c0b00baf6191529d",
+          "bytes": 4487
+        },
+        {
+          "name": "BUILD_INFO.json",
+          "sha256": "e1ba2da67dccc28e1802be47a59c7aa91d4e28cc283be047c283f03d5247b235",
+          "bytes": 525
+        },
+        {
+          "name": "Measure-ProcessTree.ps1",
+          "sha256": "d50a29677ae281f724a033fc80f26248447e895b610a45d1a376226730237e07",
+          "bytes": 4366
+        },
+        {
+          "name": "GOOGLE_ACCOUNT.md",
+          "sha256": "04196fd24abba3b07f24b124e35b5b06b5101c9635648e7a29ea8ccebabd5783",
+          "bytes": 847
+        },
+        {
+          "name": "METROLIST_PARITY.md",
+          "sha256": "c24dae16cd96f1a0ae8563b3ee35ba7b49e9280a90e70e3200ae25dae4b62462",
+          "bytes": 7298
+        }
+      ],
+      "live_google_signin_and_playback": "not_verified",
+      "bundled_mpv": false
+    },
+    {
+      "target": "x86_64-unknown-linux-gnu",
+      "compile": "passed",
+      "mode": "native-music-session",
+      "manifest": [
+        {
+          "name": "kyuutube-desktop-spike",
+          "sha256": "4a10d70d31b496d15b5f91b64e14e06ca2e6115ed9897c46ed3e6b9286bfbae4",
+          "bytes": 8689624
+        },
+        {
+          "name": "kyuutube-audio-spike",
+          "sha256": "a5eb8cf7673e01d5a5d5bda911cb1b0bd28e0960aaf61b5d3e0675d6024cf4bc",
+          "bytes": 419496
+        },
+        {
+          "name": "tone.wav",
+          "sha256": "135da730d31bd1f16acef311ffb44c2b1ec5a1a48753bfc41f0cf27f72e30db4",
+          "bytes": 2880044
+        },
+        {
+          "name": "README.md",
+          "sha256": "79e27b67af454973f524f62059aea416a27df4ad9f022b50045fe36dfeda6aaf",
+          "bytes": 1833
+        },
+        {
+          "name": "ROBOTO_FLEX_LICENSE.txt",
+          "sha256": "9d1e34d7081410f85bc1bf4805ce076a16fb1a2306661aef9a7bee72fffb5e23",
+          "bytes": 4394
+        },
+        {
+          "name": "BUILD_INFO.json",
+          "sha256": "029df2a3c0cf7194e1761991bfabab9664871425d580c48a558973af743f3d57",
+          "bytes": 516
+        },
+        {
+          "name": "Measure-ProcessTree.ps1",
+          "sha256": "73145562d439c42618e35489cc51c098cdc803b6e23a36e5ef7e5397dc6a44ef",
+          "bytes": 4273
+        },
+        {
+          "name": "GOOGLE_ACCOUNT.md",
+          "sha256": "0f3efefb532aff6425530f8a0b68fe2e1fb57f86c6303a20aa12738ad38ad014",
+          "bytes": 832
+        },
+        {
+          "name": "METROLIST_PARITY.md",
+          "sha256": "461ee1da35b9a6fe1be2a83333be7bf2b7d93d13632223f438926e5799fc61c8",
+          "bytes": 7234
+        }
+      ],
+      "live_google_signin_and_playback": "not_verified",
+      "bundled_mpv": false
+    }
+  ],
+  "release_published": false,
+  "remaining": [
+    "Live Google login and Music playback blocked by cloud proxy",
+    "Full yt-dlp format resolution not ported",
+    "Portable libmpv runtime not bundled",
+    "Performance budget unresolved"
+  ]
+}

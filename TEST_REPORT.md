@@ -277,3 +277,21 @@ and ad-requiring responses are still refused, and portable libmpv bundling remai
 unfinished. The previous virtual Linux memory budget still fails. No new portal
 release is authorized as a substitute for this native request. Alpha 3 is historical.
 See docs/RIFF_REVIEW.md for the architectural comparison and remaining gaps.
+
+
+Final native-session source 027d55ba47aa01cca6ce625de92b47ed1d75ae52 passed all four
+platform builds in run 40240424065. The 33 backend tests and the login navigation
+policy test executed on Windows, Linux, and Apple Silicon macOS; Intel macOS was
+cross-compiled. All jobs passed 19 JavaScript state tests and four packaging tests.
+Downloaded artifact manifest hashes matched for all targets. Native instructions
+are included in these artifacts; they are not the earlier portal build.
+
+Source review caught Windows keyring's UTF-16 string encoding. Session chunks
+were reduced to 1024 ASCII bytes (at most 2048 UTF-16 bytes), with at most 16
+chunks, to remain below its 2560-byte credential limit. Local tests and Clippy
+passed after that correction. The actual native UI and login-only window opened
+in the Linux desktop probe. Headless Linux lacks an unlocked Secret Service,
+so window creation was checked through native IPC; no real cookie was saved and
+no successful live Google sign-in is claimed. See reports/riff-native-desktop.json
+and reports/riff-native-builds.json. No new release was published; native live
+playback, complete extraction, and runtime packaging are still unfinished.
