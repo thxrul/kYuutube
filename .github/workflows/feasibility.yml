@@ -71,7 +71,7 @@ jobs:
       - name: Account screen state tests
         shell: bash
         run: |
-          node --test tests/account-ui.test.mjs tests/music-ui.test.mjs
+          node --test tests/account-ui.test.mjs tests/music-ui.test.mjs tests/official-ui.test.mjs
           python3 -m unittest discover -s tests -p test_release_provisioning.py
       - name: Generate local test sample
         shell: bash
@@ -83,7 +83,7 @@ jobs:
         shell: bash
         run: |
           if [ "$(rustc +1.92.0 -vV | sed -n 's/^host: //p')" = '${{ matrix.target }}' ]; then
-            cargo +1.92.0 test --locked -p kyuutube-youtube-account --target ${{ matrix.target }}
+            cargo +1.92.0 test --locked -p kyuutube-desktop-spike -p kyuutube-youtube-account --target ${{ matrix.target }}
           else
             echo 'Cross-compiled target: account tests require a matching runner.'
           fi

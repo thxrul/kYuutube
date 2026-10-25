@@ -31,8 +31,9 @@ metadata = {"purpose": "publisher browser OAuth and experimental native Music pl
             "target": target, "source_commit": os.environ.get("GITHUB_SHA", "local"),
             "runtime_validation": "See TEST_REPORT.md; a compile result is not a playback certification",
             "bundled_mpv": False,
-            "auth_mode": "publisher-browser-oauth",
+            "auth_mode": "official-webview-session",
             "native_music_playback_verified": False,
+            "official_player_test_preview": True,
             "publisher_oauth_configured": bool(os.environ.get("KYUUTUBE_GOOGLE_CLIENT_ID", "").strip()) and bool(os.environ.get("KYUUTUBE_GOOGLE_CLIENT_SECRET", "").strip())}
 (output / "BUILD_INFO.json").write_text(json.dumps(metadata, indent=2) + "\n")
 names = ["kyuutube-desktop-spike" + suffix, "kyuutube-audio-spike" + suffix, "tone.wav", "README.md", "ROBOTO_FLEX_LICENSE.txt", "BUILD_INFO.json", "Measure-ProcessTree.ps1", "GOOGLE_ACCOUNT.md", "METROLIST_PARITY.md"]

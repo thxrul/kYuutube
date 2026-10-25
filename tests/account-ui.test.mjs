@@ -4,7 +4,7 @@ import { readFileSync } from 'node:fs';
 import vm from 'node:vm';
 
 const source = readFileSync(new URL('../web/account.js', import.meta.url), 'utf8');
-const html = readFileSync(new URL('../web/index.html', import.meta.url), 'utf8');
+const html = readFileSync(new URL('./native-ui.fixture.html', import.meta.url), 'utf8');
 const ready = { available: true, has_session: false };
 const saved = { available: true, has_session: true };
 const tick = () => new Promise(setImmediate);

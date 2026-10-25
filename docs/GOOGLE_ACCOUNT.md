@@ -1,15 +1,14 @@
-# Sign in
+# Sign in and listen
 
-1. Open kYuutube and choose **Sign in with Google**.
-2. Finish signing in in your usual browser.
-3. Return to kYuutube. Your account reconnects automatically next time.
+1. Extract the archive and open `kyuutube-desktop-spike` (`.exe` on Windows).
+2. Choose **Open YouTube Music**.
+3. Use YouTube Music's own **Sign in** button, then search and play on the site.
 
-Use **Sign out** to disconnect. Your Google password stays in the browser.
+No Google Cloud project, client credentials, cookie export, or code pasting is needed.
+In-app sessions are private and are not remembered after closing the music window.
+If Google rejects embedded sign-in, choose **Open in browser** in the launcher.
+Your regular browser can use its existing saved account and handles its own session.
 
-If prompted, unlock your device's password store. If the connection fails, check
-your internet connection and choose **Try again**. “Sign-in isn't available in
-this build” means the publisher needs to update the app; you do not need to set up
-Google Cloud or enter client credentials.
-
-Music search and native playback are experimental and still need live testing.
-Offline downloads are not available yet.
+This test mode uses the official web player, not the experimental native Rust
+resolver. Ads, subscriptions, and service restrictions remain with YouTube.
+Live sign-in and playback have not been verified in this cloud environment.

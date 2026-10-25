@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import vm from 'node:vm';
 const source = readFileSync(new URL('../web/music.js', import.meta.url), 'utf8');
-const html = readFileSync(new URL('../web/index.html', import.meta.url), 'utf8');
+const html = readFileSync(new URL('./native-ui.fixture.html', import.meta.url), 'utf8');
 const tick = () => new Promise(setImmediate);
 const track = { id: 'abcdefghijk', title: '<Song>', artist: 'Artist' };
 function deferred() { let resolve; const promise = new Promise(yes => { resolve = yes; }); return { promise, resolve }; }

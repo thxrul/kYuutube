@@ -2071,6 +2071,7 @@ dependencies = [
  "kyuutube-youtube-account",
  "tauri",
  "tauri-build",
+ "webbrowser",
  "webkit2gtk",
 ]
 

@@ -215,3 +215,21 @@ release archives. No GitHub Release publication was attempted. Complete evidence
 `reports/native-music-ci-builds.json`. The publisher must supply the app-owned
 registration once; end users will not enter it. Live Music compatibility, real
 track playback, and portable runtime packaging remain required before publication.
+
+## Official-player sign-in alternative (2026-10-26, Asia/Colombo)
+
+The user allowed alternatives to mandatory browser OAuth and explicitly requested
+compiled testing binaries. Alpha 3 switches the visible flow to the official
+Music site in a separate ephemeral system webview, with a normal-browser fallback.
+No publisher registration, cookie extraction, password handling, injected site
+scripts, or user-agent spoofing is used. The remote window is denied all custom
+application IPC by its label, and navigation is constrained to explicit HTTPS
+Google/YouTube origins. Native Rust playback remains unverified and unused by this
+launcher. This testing release exception does not mark native playback verified.
+
+Sixteen JavaScript state tests and four packaging-gate tests passed locally.
+The older native UI tests now use an explicit historical HTML fixture. A new Rust
+policy test covers valid login/Music hosts and rejects deceptive, insecure, local,
+and unrelated URLs. Native build and actual-window results are recorded below
+when complete. Live Google acceptance and service playback still require testing
+outside this proxy-blocked cloud; embedded login can be declined by Google.

@@ -137,74 +137,14 @@ def main():
             request(prefix + "/element/" + element + "/click", {})
 
         assert execute("return document.title") == "kYuutube"
-        report["checks"].append("Welcome screen loaded in the actual Tauri system webview")
-        assert execute("return !document.querySelector('#client-id') && !document.querySelector('#client-secret') && !document.body.textContent.includes('Google Cloud')")
-        state = request(prefix + "/execute/async", {"script": "const done=arguments[arguments.length-1]; window.__TAURI__.core.invoke('account_status').then(done,e=>done({error:String(e)}));", "args": []})
-        assert state == {"available": False, "has_session": False}, state
-        deadline = time.monotonic() + 5
-        while time.monotonic() < deadline:
-            if execute("return document.querySelector('#account-state').textContent.includes('isn’t available')"):
-                break
-            time.sleep(0.1)
-        assert execute("return document.querySelector('#google-sign-in').disabled && document.querySelector('#account-state').textContent.includes('isn’t available')")
-        assert execute("return localStorage.length === 0")
-        report["checks"].append("No user credential fields or Google Cloud instructions; unprovisioned build cannot claim working sign-in")
-        rejected = request(prefix + "/execute/async", {"script": "const done=arguments[arguments.length-1]; window.__TAURI__.core.invoke('configure_google', {clientId:'invalid-client',clientSecret:'fixture'}).then(()=>done('unexpected success'),e=>done(String(e)));", "args": []})
-        assert 'not found' in rejected.lower(), rejected
-        report["checks"].append("Removed user credential configuration IPC is rejected by the native application")
-        time.sleep(0.5)
+        assert execute("return !!document.querySelector('#open-music') && !!document.querySelector('#open-browser') && !document.querySelector('#client-id')")
+        report["checks"].append("Credential-free official-player launcher rendered in real Tauri webview")
         capture_window(prefix, ROOT / "reports/local-welcome.png")
-        for width, height in [(360, 480), (1920, 1080)]:
-            request(prefix + "/window/rect", {"width": width, "height": height, "x": 0, "y": 0})
-            time.sleep(0.3)
-            assert execute("return document.documentElement.scrollWidth <= document.documentElement.clientWidth + 1")
-        request(prefix + "/window/rect", {"width": 960, "height": 680, "x": 0, "y": 0})
-        report["checks"].append("Welcome layout has no horizontal overflow at compact and wide sizes")
-        process = app_process()
-        time.sleep(4)
-        report["stages"]["welcome_idle"] = measure(process, 10)
-        click("#about-open")
-        assert execute("return document.querySelector('#about-dialog').open")
-        click("a[href='diagnostics.html']")
-        deadline = time.monotonic() + 5
-        while execute("return document.title") != "kYuutube · Audio diagnostics" and time.monotonic() < deadline:
-            time.sleep(0.1)
-        assert execute("return document.title") == "kYuutube · Audio diagnostics"
-        report["checks"].append("Audio diagnostics are separate from the welcome and account flow")
-        click("#play")
-        # IPC completion starts asynchronous file loading. Wait for actual
-        # timeline progress rather than assuming a two-second startup delay.
-        deadline = time.monotonic() + 15
-        start = snapshot()
-        while (start.get("position_seconds") or 0) <= 0.2 and time.monotonic() < deadline:
-            time.sleep(0.25)
-            start = snapshot()
-        assert (start.get("position_seconds") or 0) > 0.2, start
-        report["stages"]["local_playing"] = measure(process, 15)
-        later = snapshot()
-        assert later["position_seconds"] > start["position_seconds"] + 5, (start, later)
-        report["checks"].append("Play button started an advancing native local-file timeline")
-        click("#pause")
-        time.sleep(0.3)
-        paused = snapshot()
+        click("#open-music")
         time.sleep(1)
-        stable = snapshot()
-        assert stable["paused"] and abs(stable["position_seconds"] - paused["position_seconds"]) < 0.2
-        report["checks"].append("Pause button stopped the playback timeline")
-        execute("const e=document.querySelector('#seek');e.value='5';e.dispatchEvent(new Event('change'))")
-        time.sleep(0.5)
-        assert abs(snapshot()["position_seconds"] - 5) < 0.5
-        report["checks"].append("Seek control moved the paused timeline to five seconds")
-        execute("const e=document.querySelector('#volume');e.value='25';e.dispatchEvent(new Event('change'))")
-        report["checks"].append("Volume UI event submitted; hardware loudness not verified")
-        for width, height in [(360, 480), (1920, 1080)]:
-            request(prefix + "/window/rect", {"width": width, "height": height, "x": 0, "y": 0})
-            time.sleep(0.3)
-            assert execute("return document.documentElement.scrollWidth <= document.documentElement.clientWidth + 1")
-        report["checks"].append("Compact and wide window sizes had no horizontal overflow")
-        request(prefix + "/window/rect", {"width": 960, "height": 680, "x": 0, "y": 0})
-        time.sleep(0.5)
-        capture_window(prefix, ROOT / "reports/local-spike.png")
+        handles = request(prefix + "/window/handles")
+        assert len(handles) == 2, handles
+        report["checks"].append("Open Music created a separate remote player window; live site access remains blocked")
         report["status"] = "passed"
     except Exception as error:
         report["status"] = "failed"

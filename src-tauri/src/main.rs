@@ -1,4 +1,5 @@
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
+mod official_player;
 use kyuutube_audio_spike::{Player, Snapshot};
 use kyuutube_youtube_account::{Account, AccountStatus, Channel, MusicTrack, Page};
 use std::{
@@ -259,23 +260,34 @@ fn main() {
             cancelled: AtomicBool::new(false),
         }))
         .manage(account)
-        .invoke_handler(tauri::generate_handler![
-            play_sample,
-            pause,
-            seek,
-            volume,
-            snapshot,
-            search_music,
-            play_music,
-            stop_music,
-            account_status,
-            google_sign_in,
-            restore_google_session,
-            cancel_google_sign_in,
-            youtube_channel,
-            youtube_playlists,
-            disconnect_google
-        ])
+        .invoke_handler(|invoke| {
+            if invoke.message.webview().label() != "main" {
+                invoke
+                    .resolver
+                    .reject("Remote windows cannot invoke application commands");
+                return true;
+            }
+            let handler: fn(tauri::ipc::Invoke<tauri::Wry>) -> bool = tauri::generate_handler![
+                official_player::open_music,
+                official_player::open_music_browser,
+                play_sample,
+                pause,
+                seek,
+                volume,
+                snapshot,
+                search_music,
+                play_music,
+                stop_music,
+                account_status,
+                google_sign_in,
+                restore_google_session,
+                cancel_google_sign_in,
+                youtube_channel,
+                youtube_playlists,
+                disconnect_google
+            ];
+            handler(invoke)
+        })
         .run(tauri::generate_context!())
         .expect("Desktop spike could not start");
 }

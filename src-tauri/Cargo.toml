@@ -8,6 +8,7 @@ publish = false
 tauri-build = { version = "2", features = [] }
 
 [dependencies]
+webbrowser = "1"
 kyuutube-youtube-account = { path = "../crates/youtube-account" }
 kyuutube-audio-spike = { path = "../crates/audio-spike" }
 tauri = { version = "2", features = [] }

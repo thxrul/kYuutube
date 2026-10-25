@@ -47,6 +47,20 @@ class ReleaseProvisioning(unittest.TestCase):
             self.assertIn('Native YouTube Music playback has not been verified', result.stderr)
             self.assertEqual(list(output.iterdir()), [])
 
+    def test_explicit_official_player_preview_can_be_packaged_without_native_claims(self):
+        with tempfile.TemporaryDirectory() as temp:
+            directory=Path(temp)
+            result, output=self.package(directory, False, False)
+            self.assertNotEqual(result.returncode, 0)
+            for metadata in (directory/'artifacts').glob('*/BUILD_INFO.json'):
+                info=json.loads(metadata.read_text())
+                info['auth_mode']='official-webview-session'
+                info['official_player_test_preview']=True
+                metadata.write_text(json.dumps(info))
+                (metadata.parent/'SHA256SUMS.txt').write_text(hashlib.sha256(metadata.read_bytes()).hexdigest()+'  BUILD_INFO.json\n')
+            result=subprocess.run([sys.executable,str(ROOT/'tools/package_alpha.py'),str(directory/'artifacts'),str(output),'--source',SOURCE,'--tag','v0.0.1-alpha.3'],capture_output=True,text=True)
+            self.assertEqual(result.returncode,0,result.stderr)
+
     def test_configured_manifest_can_be_archived_with_verified_checksums(self):
         with tempfile.TemporaryDirectory() as temp:
             result, output = self.package(Path(temp), True)

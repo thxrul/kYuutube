@@ -31,7 +31,7 @@ for target, label in targets.items():
         raise ValueError('Unexpected artifact provenance')
     if info.get('auth_mode') == 'publisher-browser-oauth' and info.get('publisher_oauth_configured') is not True:
         raise ValueError('Publisher OAuth is missing. Configure the repository Actions secrets and rebuild before publishing this sign-in flow.')
-    if info.get('native_music_playback_verified') is not True:
+    if info.get('native_music_playback_verified') is not True and not (info.get('auth_mode') == 'official-webview-session' and info.get('official_player_test_preview') is True):
         raise ValueError('Native YouTube Music playback has not been verified. Publication is on hold until a real authenticated track plays.')
     for line in (folder / 'SHA256SUMS.txt').read_text().splitlines():
         expected, name = line.split('  ', 1)
