@@ -1,3 +1,5 @@
+> Historical OAuth research: the current native session-login path does not require this registration. See GOOGLE_ACCOUNT.md and RIFF_REVIEW.md.
+
 # One-time publisher setup for browser sign-in
 
 This is maintainer work. End users never create a Cloud project, enter a client
