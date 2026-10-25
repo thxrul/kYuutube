@@ -50,6 +50,30 @@ def capture_window(prefix, path):
         objects.g_object_unref(image)
 
 
+def native_window_titles():
+    # Private webviews use a separate WebKit context and are not enumerated by
+    # the launcher's WebDriver session. Inspect actual X11 top-level windows.
+    x = ctypes.CDLL("libX11.so.6")
+    x.XOpenDisplay.argtypes=[ctypes.c_char_p]; x.XOpenDisplay.restype=ctypes.c_void_p
+    x.XDefaultRootWindow.argtypes=[ctypes.c_void_p]; x.XDefaultRootWindow.restype=ctypes.c_ulong
+    x.XQueryTree.argtypes=[ctypes.c_void_p,ctypes.c_ulong,ctypes.POINTER(ctypes.c_ulong),ctypes.POINTER(ctypes.c_ulong),ctypes.POINTER(ctypes.POINTER(ctypes.c_ulong)),ctypes.POINTER(ctypes.c_uint)]
+    x.XFetchName.argtypes=[ctypes.c_void_p,ctypes.c_ulong,ctypes.POINTER(ctypes.c_void_p)]
+    x.XFree.argtypes=[ctypes.c_void_p]; x.XCloseDisplay.argtypes=[ctypes.c_void_p]
+    display=x.XOpenDisplay(None)
+    if not display: raise RuntimeError("X11 display unavailable")
+    root=ctypes.c_ulong(); parent=ctypes.c_ulong(); children=ctypes.POINTER(ctypes.c_ulong)(); count=ctypes.c_uint()
+    names=[]
+    try:
+        assert x.XQueryTree(display,x.XDefaultRootWindow(display),ctypes.byref(root),ctypes.byref(parent),ctypes.byref(children),ctypes.byref(count))
+        for i in range(count.value):
+            title=ctypes.c_void_p()
+            if x.XFetchName(display,children[i],ctypes.byref(title)) and title.value:
+                names.append(ctypes.string_at(title).decode('utf-8','replace')); x.XFree(title)
+        if children: x.XFree(children)
+    finally: x.XCloseDisplay(display)
+    return names
+
+
 def app_process():
     for p in psutil.process_iter(["name"]):
         try:
@@ -142,8 +166,10 @@ def main():
         capture_window(prefix, ROOT / "reports/local-welcome.png")
         click("#open-music")
         time.sleep(1)
-        handles = request(prefix + "/window/handles")
-        assert len(handles) == 2, handles
+        status=execute("return document.querySelector('#official-status').textContent")
+        assert status == '', status
+        titles=native_window_titles()
+        assert any('YouTube Music' in title for title in titles), titles
         report["checks"].append("Open Music created a separate remote player window; live site access remains blocked")
         report["status"] = "passed"
     except Exception as error:

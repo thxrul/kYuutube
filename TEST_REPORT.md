@@ -233,3 +233,20 @@ policy test covers valid login/Music hosts and rejects deceptive, insecure, loca
 and unrelated URLs. Native build and actual-window results are recorded below
 when complete. Live Google acceptance and service playback still require testing
 outside this proxy-blocked cloud; embedded login can be declined by Google.
+
+
+Alpha 3 verification completed: local Rust navigation policy test and Clippy
+passed. The actual Linux Tauri launcher rendered and created a separate private
+Music window; X11 window titles confirmed creation. The private WebKit context
+is not listed in the launcher's WebDriver window handles, so that incorrect test
+assumption was replaced with actual native-window inspection. No live Google
+login or playback is claimed. A fresh Music HEAD request still returned proxy
+CONNECT 403 at 2026-10-25 21:45:40 UTC.
+
+Build run 40236546541 compiled all four targets. Native Windows, Linux, and Apple
+Silicon jobs ran the desktop policy and account protocol tests; Intel macOS was
+cross-compiled. JavaScript and packaging checks passed. Publication run 40237209140
+verified build provenance and manifest hashes, published alpha 3 as a prerelease,
+then downloaded and verified all four public archive hashes. This is an explicit
+official-web-player testing exception authorized by the latest user request,
+not verification of the old native stream resolver or original performance budget.

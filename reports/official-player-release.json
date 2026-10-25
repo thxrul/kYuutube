@@ -1,0 +1,34 @@
+{
+  "source_commit": "7666f7dc0a9b96f81546b568b904600c4d87ac95",
+  "build_run": "https://github.com/thxrul/kYuutube/actions/runs/40236546541",
+  "publication_run": "https://github.com/thxrul/kYuutube/actions/runs/40237209140",
+  "release": "https://github.com/thxrul/kYuutube/releases/tag/v0.0.1-alpha.3",
+  "prerelease": true,
+  "assets": [
+    {
+      "name": "kYuutube-v0.0.1-alpha.3-linux-x86_64.tar.gz",
+      "bytes": 3396070
+    },
+    {
+      "name": "kYuutube-v0.0.1-alpha.3-macos-arm64.tar.gz",
+      "bytes": 3029850
+    },
+    {
+      "name": "kYuutube-v0.0.1-alpha.3-macos-x86_64.tar.gz",
+      "bytes": 3223594
+    },
+    {
+      "name": "kYuutube-v0.0.1-alpha.3-windows-x86_64.zip",
+      "bytes": 3411823
+    },
+    {
+      "name": "SHA256SUMS.txt",
+      "bytes": 438
+    }
+  ],
+  "public_archive_checksum_validation": "passed",
+  "mode": "official-webview-session",
+  "live_google_signin_and_playback": "unverified_proxy_blocked",
+  "native_rust_playback_verified": false,
+  "memory_budget_pass": false
+}

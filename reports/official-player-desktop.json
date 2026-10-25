@@ -1,0 +1,12 @@
+{
+  "test_kind": "local sample in Tauri/WebKitGTK under Xvfb; no physical audio or YouTube",
+  "requested_graphics_policy": "never",
+  "prelaunch_compositing_disabled": true,
+  "screenshot_method": "native GDK capture of the actual X11 window",
+  "checks": [
+    "Credential-free official-player launcher rendered in real Tauri webview",
+    "Open Music created a separate remote player window; live site access remains blocked"
+  ],
+  "stages": {},
+  "status": "passed"
+}

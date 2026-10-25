@@ -3,6 +3,8 @@
 Independent desktop launcher for the official YouTube Music web player.
 Not affiliated with Google or YouTube.
 
+[Download alpha 3](https://github.com/thxrul/kYuutube/releases/tag/v0.0.1-alpha.3).
+
 The new test mode needs no Google Cloud setup: **open → Open YouTube Music →
 sign in on the official site**. It uses your OS webview in a separate private
 window. If Google declines embedded sign-in, choose **Open in browser** to use
