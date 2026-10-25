@@ -1315,7 +1315,7 @@ mod tests {
         let cookie = format!("SAPISID=fixture; other={}", "x".repeat(5000));
         account.save_music_session(cookie.clone()).unwrap();
         assert_eq!(account.session_cookie().unwrap().unwrap().as_str(), cookie);
-        assert!(store.0.lock().unwrap().values().all(|v| v.len() <= 2048));
+        assert!(store.0.lock().unwrap().values().all(|v| v.len() <= 1024));
         assert!(account.status().unwrap().has_session);
         account.forget_session().unwrap();
         assert!(account.session_cookie().unwrap().is_none());

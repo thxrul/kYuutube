@@ -55,7 +55,7 @@ impl Account {
             return Ok(None);
         };
         if meta.count == 0
-            || meta.count > 8
+            || meta.count > 16
             || meta.id.len() != 43
             || !meta
                 .id
@@ -70,7 +70,7 @@ impl Account {
                 .store
                 .read(&format!("music-{}-{i}", meta.id))?
                 .ok_or("Saved session is incomplete")?;
-            if chunk.len() > 2048 {
+            if chunk.len() > 1024 {
                 return Err("Saved session is invalid".into());
             }
             value.push_str(&chunk);
@@ -96,9 +96,9 @@ impl Account {
         }
         let previous = self.session_generation()?;
         let id = super::random_secret()?.to_string();
-        let count = cookie.len().div_ceil(2048);
+        let count = cookie.len().div_ceil(1024);
         let stored = (|| {
-            for (i, chunk) in cookie.as_bytes().chunks(2048).enumerate() {
+            for (i, chunk) in cookie.as_bytes().chunks(1024).enumerate() {
                 self.store.write(
                     &format!("music-{id}-{i}"),
                     std::str::from_utf8(chunk).map_err(|_| "Invalid session")?,
@@ -120,7 +120,7 @@ impl Account {
             return stored;
         }
         if let Some(old) = previous {
-            for i in 0..old.count.min(8) {
+            for i in 0..old.count.min(16) {
                 let _ = self.store.delete(&format!("music-{}-{i}", old.id));
             }
         }
@@ -128,7 +128,7 @@ impl Account {
     }
     pub(super) fn forget_session(&self) -> Result<(), String> {
         if let Some(old) = self.session_generation()? {
-            for i in 0..old.count.min(8) {
+            for i in 0..old.count.min(16) {
                 self.store.delete(&format!("music-{}-{i}", old.id))?;
             }
         }

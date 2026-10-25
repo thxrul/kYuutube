@@ -23,7 +23,7 @@ Current kYuutube source restores a custom native UI and Rust/libmpv playback:
 5. Sign-out stops audio and removes the saved session. The login webview remains
    ephemeral; long-lived credentials are stored only in OS secure storage.
 
-Windows credential-size limits are handled with bounded 2048-byte chunks and a
+Windows credential-size limits are handled with bounded 1024-byte ASCII chunks (at most 2048 UTF-16 bytes) and a
 commit pointer. A rejected account verification cannot replace an existing
 session. Only this app's login-window cookies are read, never another browser's
 profile. Remote login pages cannot invoke application commands or inject scripts
