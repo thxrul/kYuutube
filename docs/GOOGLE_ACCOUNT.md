@@ -1,14 +1,15 @@
-# Sign in and listen
+# Native account sign-in
 
-1. Extract the archive and open `kyuutube-desktop-spike` (`.exe` on Windows).
-2. Choose **Open YouTube Music**.
-3. Use YouTube Music's own **Sign in** button, then search and play on the site.
+1. In kYuutube, choose **Sign in with Google**.
+2. Sign in in the temporary Google login window.
+3. Return to kYuutube and choose **Finish sign-in**.
+4. After verification, search for a song and select it to play in the native player.
 
-No Google Cloud project, client credentials, cookie export, or code pasting is needed.
-In-app sessions are private and are not remembered after closing the music window.
-If Google rejects embedded sign-in, choose **Open in browser** in the launcher.
-Your regular browser can use its existing saved account and handles its own session.
+The login window is for account authorization only; playback stays in the native
+UI. No Google Cloud setup or cookie export is required. The app stores its own
+session in your OS password store. Unlock that store if prompted. Use **Sign out**
+to remove the saved session. Never share passwords, cookies, or tokens in reports.
 
-This test mode uses the official web player, not the experimental native Rust
-resolver. Ads, subscriptions, and service restrictions remain with YouTube.
-Live sign-in and playback have not been verified in this cloud environment.
+This path is implemented but not verified against live Google login or a real
+YouTube Music track here. Google may decline embedded login. Direct-stream format
+support and native runtime packaging are incomplete; this is not a production app.

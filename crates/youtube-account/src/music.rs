@@ -23,13 +23,19 @@ fn valid_id(id: &str) -> bool {
             .bytes()
             .all(|c| c.is_ascii_alphanumeric() || c == b'_' || c == b'-')
 }
-fn context() -> Value {
+pub(super) fn context() -> Value {
     let now = time::OffsetDateTime::now_utc();
     json!({"client":{"clientName":"WEB_REMIX", "clientVersion":format!("1.{:04}{:02}{:02}.01.00", now.year(), u8::from(now.month()), now.day()), "hl":"en"}, "user":{}})
 }
 impl Account {
     fn music_request(&self, endpoint: &str, mut body: Value) -> Result<Value, String> {
         body["context"] = context();
+        if let Some(cookie) = self.session_cookie()? {
+            let authorization = super::session::authorization(&cookie)?;
+            return self
+                .http
+                .music_session(endpoint, &cookie, &authorization, &body);
+        }
         let result = self.http.music(endpoint, &self.token()?, &body);
         if result
             .as_ref()
@@ -71,7 +77,10 @@ impl Account {
             return Err("Enter a shorter music search".into());
         }
         self.verify_music_account()?;
-        let value = self.music_request("search", json!({"query": query}))?;
+        let value = self.music_request(
+            "search",
+            json!({"query": query, "params":"EgWKAQIIAWoMEA4QChADEAQQCRAF"}),
+        )?;
         let mut tracks = Vec::new();
         collect_tracks(&value, 0, &mut HashSet::new(), &mut tracks);
         Ok(tracks)
@@ -89,7 +98,7 @@ impl Account {
         parse_stream(value, &id)
     }
 }
-fn has_account_header(value: &Value, depth: u8) -> bool {
+pub(super) fn has_account_header(value: &Value, depth: u8) -> bool {
     if depth > 24 {
         return false;
     }

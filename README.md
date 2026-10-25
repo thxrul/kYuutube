@@ -1,30 +1,28 @@
 # kYuutube
 
-Independent desktop launcher for the official YouTube Music web player.
-Not affiliated with Google or YouTube.
+Native desktop YouTube Music player in development. The current source uses its
+own UI, Rust Music API requests, and native libmpv audio. It does not play the
+YouTube Music website or launch a browser as its player.
 
-[Download alpha 3](https://github.com/thxrul/kYuutube/releases/tag/v0.0.1-alpha.3).
+[Riff source review and implementation limits](docs/RIFF_REVIEW.md).
 
-The new test mode needs no Google Cloud setup: **open → Open YouTube Music →
-sign in on the official site**. It uses your OS webview in a separate private
-window. If Google declines embedded sign-in, choose **Open in browser** to use
-your normal browser and its existing account. In-app sessions are not persisted.
-No passwords or cookies are extracted, no scripts are injected into the site,
-and remote windows cannot invoke app commands.
+Sign-in now uses a temporary Google login window. Choose **Finish sign-in** in
+the app after signing in. The backend verifies the Music account and stores the
+app's own session in Windows Credential Manager, macOS Keychain, or Linux Secret
+Service. No Google Cloud project, exported browser cookie file, or pasted token
+is required. Cookies remain in Rust; the UI receives only success/failure and
+public metadata. Google may still reject embedded sign-in; live testing is needed.
 
-This is an official-web-player test preview, not verified native Rust streaming
-or full Metrolist parity. YouTube handles playback, ads, and subscriptions.
-The cloud blocks YouTube Music, so live sign-in/playback still needs your testing.
-The previous memory target remains unmet/unverified for this mode. Offline
-YouTube downloads are not implemented. No telemetry, ad blocking, or Premium
-bypass is implemented.
+Native search/streaming currently supports direct audio leases; Riff's complete
+yt-dlp extraction pipeline is not ported. Cipher-only, protected, and ad-requiring
+responses are refused. Live account/stream compatibility remains unverified:
+the cloud proxy blocks YouTube Music. Portable audio-runtime bundling, offline
+downloads, full Metrolist parity, and the memory budget remain unfinished.
 
-See [sign-in instructions](docs/GOOGLE_ACCOUNT.md) and the
-[sign-in options review](docs/SIGN_IN_OPTIONS.md). Windows requires WebView2;
-Linux requires WebKitGTK 4.1; macOS uses WKWebView. libmpv is unnecessary for this
-mode. Downloads are unsigned standalone executables, not installers.
+Alpha 3 is an older portal experiment and is not the current native implementation.
+No new release is claimed from source compilation or mock-provider tests.
 
-The experimental native OAuth/stream code remains in the repository for research.
-Its previous tests do not establish that the new web-player login works. Alpha 3
-is authorized for testing by the user's latest instruction; native playback must
-still not be advertised as verified.
+See [testing status](TEST_REPORT.md), [performance](PERFORMANCE.md), and
+[native environment instructions](docs/NATIVE_SPIKE.md). YouTube Music has no
+official public API; unofficial integrations can break. This project is independent
+of Google/YouTube. No telemetry, ad skipping, or Premium bypass is implemented.

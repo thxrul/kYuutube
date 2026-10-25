@@ -161,16 +161,17 @@ def main():
             request(prefix + "/element/" + element + "/click", {})
 
         assert execute("return document.title") == "kYuutube"
-        assert execute("return !!document.querySelector('#open-music') && !!document.querySelector('#open-browser') && !document.querySelector('#client-id')")
-        report["checks"].append("Credential-free official-player launcher rendered in real Tauri webview")
+        assert execute("return !!document.querySelector('#music-search') && !!document.querySelector('#finish-sign-in') && !document.querySelector('#open-browser') && !document.querySelector('#client-id')")
+        report["checks"].append("Native search/player shell rendered without portal controls")
         capture_window(prefix, ROOT / "reports/local-welcome.png")
-        click("#open-music")
+        # Headless Linux has no unlocked Secret Service. Test window creation
+        # through actual native IPC without pretending account verification ran.
+        result=request(prefix + "/execute/async", {"script":"const done=arguments[arguments.length-1];window.__TAURI__.core.invoke('begin_music_login').then(()=>done({ok:true}),e=>done({error:String(e)}));","args":[]})
+        assert result.get('ok'), result
         time.sleep(1)
-        status=execute("return document.querySelector('#official-status').textContent")
-        assert status == '', status
         titles=native_window_titles()
-        assert any('YouTube Music' in title for title in titles), titles
-        report["checks"].append("Open Music created a separate remote player window; live site access remains blocked")
+        assert any('Sign in to YouTube Music' in title for title in titles), titles
+        report["checks"].append("Dedicated account login window opened; native playback remains in the app")
         report["status"] = "passed"
     except Exception as error:
         report["status"] = "failed"

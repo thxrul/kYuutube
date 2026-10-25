@@ -1,6 +1,7 @@
 //! System-browser OAuth and an experimental authenticated Music service adapter.
 //! Live service compatibility is unverified. Tokens and leases never enter the UI.
 mod music;
+mod session;
 use base64::{engine::general_purpose::URL_SAFE_NO_PAD, Engine};
 pub use music::{MusicStream, MusicTrack};
 use reqwest::blocking::{Client, Response};
@@ -118,6 +119,15 @@ trait Transport: Send + Sync {
     fn form(&self, endpoint: &str, fields: &[(&str, &str)]) -> Result<Value, String>;
     fn get(&self, resource: &str, token: &str, query: &[(&str, &str)]) -> Result<Value, String>;
     fn music(&self, endpoint: &str, token: &str, body: &Value) -> Result<Value, String>;
+    fn music_session(
+        &self,
+        _endpoint: &str,
+        _cookie: &str,
+        _authorization: &str,
+        _body: &Value,
+    ) -> Result<Value, String> {
+        Err("Session transport unavailable".into())
+    }
 }
 struct GoogleHttp(Client);
 fn response_json(response: Response) -> Result<Value, String> {
@@ -198,6 +208,28 @@ impl Transport for GoogleHttp {
                 .bearer_auth(token)
                 .header("Origin", "https://music.youtube.com")
                 .header("User-Agent", "kYuutube/0.0.1")
+                .json(body)
+                .send()
+                .map_err(|_| "Could not reach YouTube Music; check your connection")?,
+        )
+    }
+    fn music_session(
+        &self,
+        endpoint: &str,
+        cookie: &str,
+        authorization: &str,
+        body: &Value,
+    ) -> Result<Value, String> {
+        if !matches!(endpoint, "account/account_menu" | "search" | "player") {
+            return Err("Unsupported Music endpoint".into());
+        }
+        response_json(
+            self.0
+                .post(format!("https://music.youtube.com/youtubei/v1/{endpoint}"))
+                .header("Cookie", cookie)
+                .header("Authorization", authorization)
+                .header("Origin", "https://music.youtube.com")
+                .header("X-Goog-AuthUser", "0")
                 .json(body)
                 .send()
                 .map_err(|_| "Could not reach YouTube Music; check your connection")?,
@@ -424,6 +456,12 @@ impl Account {
         }
     }
     pub fn status(&self) -> Result<AccountStatus, String> {
+        if self.session_cookie()?.is_some() {
+            return Ok(AccountStatus {
+                available: true,
+                has_session: true,
+            });
+        }
         // A publisher registration is supplied by the build, never by the user.
         // Old alpha credentials cannot silently enable an unprovisioned build.
         let Some(config) = &self.app_client else {
@@ -685,6 +723,7 @@ impl Account {
             .operation
             .try_lock()
             .map_err(|_| "Wait for the cancelled operation to finish, then disconnect")?;
+        self.forget_session()?;
         let refresh = self.store.read("refresh")?;
         let remote = refresh
             .as_ref()
@@ -795,6 +834,23 @@ mod tests {
                 .unwrap()
                 .pop_front()
                 .expect("Unexpected Music POST")
+        }
+        fn music_session(
+            &self,
+            endpoint: &str,
+            _: &str,
+            _: &str,
+            _: &Value,
+        ) -> Result<Value, String> {
+            self.calls
+                .lock()
+                .unwrap()
+                .push(format!("session:{endpoint}"));
+            self.gets
+                .lock()
+                .unwrap()
+                .pop_front()
+                .expect("Unexpected session request")
         }
     }
     fn config() -> ClientConfig {
@@ -1247,6 +1303,65 @@ mod tests {
         assert_eq!(
             &*http.calls.lock().unwrap(),
             &["music:account/account_menu"]
+        );
+    }
+    #[test]
+    fn native_session_is_verified_and_chunked_in_secure_store() {
+        let (account, store, http) = fixture();
+        http.gets
+            .lock()
+            .unwrap()
+            .push_back(Ok(music::tests::account_response()));
+        let cookie = format!("SAPISID=fixture; other={}", "x".repeat(5000));
+        account.save_music_session(cookie.clone()).unwrap();
+        assert_eq!(account.session_cookie().unwrap().unwrap().as_str(), cookie);
+        assert!(store.0.lock().unwrap().values().all(|v| v.len() <= 2048));
+        assert!(account.status().unwrap().has_session);
+        account.forget_session().unwrap();
+        assert!(account.session_cookie().unwrap().is_none());
+    }
+    #[test]
+    fn session_search_uses_native_cookie_auth_without_oauth_registration() {
+        let (_, store, http) = fixture();
+        let account = Account::with(None, Box::new(store), Box::new(http.clone()));
+        for response in [
+            music::tests::account_response(),
+            music::tests::account_response(),
+            serde_json::json!({"contents":[]}),
+        ] {
+            http.gets.lock().unwrap().push_back(Ok(response));
+        }
+        account
+            .save_music_session("SAPISID=fixture".into())
+            .unwrap();
+        assert!(account.search_music("song".into()).unwrap().is_empty());
+        assert_eq!(
+            &*http.calls.lock().unwrap(),
+            &[
+                "session:account/account_menu",
+                "session:account/account_menu",
+                "session:search"
+            ]
+        );
+    }
+    #[test]
+    fn rejected_login_does_not_replace_an_existing_session() {
+        let (account, _, http) = fixture();
+        http.gets
+            .lock()
+            .unwrap()
+            .push_back(Ok(music::tests::account_response()));
+        account.save_music_session("SAPISID=first".into()).unwrap();
+        http.gets
+            .lock()
+            .unwrap()
+            .push_back(Ok(serde_json::json!({"actions":[]})));
+        assert!(account
+            .save_music_session("SAPISID=rejected".into())
+            .is_err());
+        assert_eq!(
+            account.session_cookie().unwrap().unwrap().as_str(),
+            "SAPISID=first"
         );
     }
     #[test]

@@ -250,3 +250,30 @@ verified build provenance and manifest hashes, published alpha 3 as a prerelease
 then downloaded and verified all four public archive hashes. This is an explicit
 official-web-player testing exception authorized by the latest user request,
 not verification of the old native stream resolver or original performance budget.
+
+## Riff-guided native session authentication
+
+The user rejected the portal architecture and requested Riff as a source guide
+with sign-in added. Riff commit d03b2833b07420e609276937a694d9b3254009c0 was inspected.
+It uses direct Music search plus yt-dlp extraction and has no YouTube account login.
+The current source restores the custom native search/player UI and adds a
+login-only ephemeral window. Rust reads only that app window's Music-origin
+cookies, verifies the Music account endpoint, and commits bounded session chunks
+to the OS keystore. No session values are passed through JavaScript or written to
+plaintext files. Native API requests now support session authorization without a
+Google OAuth registration. Cancellation closes the login window, and sign-out
+removes stored session chunks. Remote pages remain denied application IPC.
+
+33 backend tests passed locally, including origin-bound signing, header-injection
+rejection, chunked storage, no-OAuth native session search, and preserving a prior
+session after rejected verification. Nineteen JavaScript tests passed (three new
+native sign-in state tests, plus prior regression fixtures), and four packaging
+tests passed. These use fictitious credentials and provider fixtures; they are
+not proof that Google accepts the login or a real track plays.
+
+The latest Music origin probe again failed at proxy CONNECT 403, before a provider
+response. Riff's complete yt-dlp resolver has not been ported: cipher-only, DRM,
+and ad-requiring responses are still refused, and portable libmpv bundling remains
+unfinished. The previous virtual Linux memory budget still fails. No new portal
+release is authorized as a substitute for this native request. Alpha 3 is historical.
+See docs/RIFF_REVIEW.md for the architectural comparison and remaining gaps.

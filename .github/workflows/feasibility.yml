@@ -71,7 +71,7 @@ jobs:
       - name: Account screen state tests
         shell: bash
         run: |
-          node --test tests/account-ui.test.mjs tests/music-ui.test.mjs tests/official-ui.test.mjs
+          node --test tests/account-ui.test.mjs tests/music-ui.test.mjs tests/official-ui.test.mjs tests/native-session-ui.test.mjs
           python3 -m unittest discover -s tests -p test_release_provisioning.py
       - name: Generate local test sample
         shell: bash

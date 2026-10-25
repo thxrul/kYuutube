@@ -1,5 +1,5 @@
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
-mod official_player;
+mod session_login;
 use kyuutube_audio_spike::{Player, Snapshot};
 use kyuutube_youtube_account::{Account, AccountStatus, Channel, MusicTrack, Page};
 use std::{
@@ -268,8 +268,9 @@ fn main() {
                 return true;
             }
             let handler: fn(tauri::ipc::Invoke<tauri::Wry>) -> bool = tauri::generate_handler![
-                official_player::open_music,
-                official_player::open_music_browser,
+                session_login::begin_music_login,
+                session_login::finish_music_login,
+                session_login::cancel_music_login,
                 play_sample,
                 pause,
                 seek,

@@ -1,4 +1,41 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>kYuutube</title><link rel="stylesheet" href="style.css"><script src="official.js" defer></script></head>
-<body class="welcome-page"><main class="welcome"><header class="brand"><span class="brand-mark" aria-hidden="true">kY</span><span>kYuutube</span></header>
-<section class="welcome-content"><h1>Your music. Your space.</h1><p>Open YouTube Music and sign in with Google.</p><div class="account-actions"><button id="open-music">Open YouTube Music</button><button id="open-browser" class="outlined">Open in browser</button></div><p id="official-status" role="status" aria-live="polite"></p><p class="preview-note">Test preview · Official web player</p></section>
-<footer><p>In-app sign-in lasts for this session. Your browser can remember your account.</p><p>If Google declines in-app sign-in, choose Open in browser.</p><p>Independent client. Not affiliated with Google or YouTube.</p></footer></main></body></html>
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>kYuutube</title><link rel="stylesheet" href="style.css"><script src="native-account.js" defer></script><script src="music.js" defer></script>
+</head>
+<body class="welcome-page">
+<main class="welcome" id="main">
+<header class="brand"><span class="brand-mark" aria-hidden="true">kY</span><span>kYuutube</span></header>
+<section class="welcome-content" aria-labelledby="welcome-heading">
+<h1 id="welcome-heading">Your music.<br>Your space.</h1>
+<p id="account-intro">Sign in with Google to connect your account.</p>
+<div class="account-actions">
+<button id="google-sign-in" disabled>Sign in with Google</button>
+<button id="finish-sign-in" hidden>Finish sign-in</button><button id="cancel-sign-in" class="outlined" hidden>Cancel</button>
+<button id="disconnect-google" class="outlined" hidden>Sign out</button>
+</div>
+<p id="account-state" role="status" aria-live="polite"></p>
+<button id="retry-account" class="text-button" hidden>Try again</button>
+<p class="preview-note">Preview · Music playback is still in development.</p>
+</section>
+<section id="music-browser" hidden aria-labelledby="music-heading">
+<h2 id="music-heading">Find your next song.</h2>
+<form id="music-search"><label class="visually-hidden" for="music-query">Search music</label><input id="music-query" type="search" maxlength="200" placeholder="Search music" required autocomplete="off"><button id="search-music" type="submit">Search</button></form>
+<p id="music-status" role="status" aria-live="polite"></p><ul id="music-results" aria-label="Search results"></ul>
+</section>
+<section id="music-player" class="player" hidden aria-labelledby="playing-title">
+<div><h2 id="playing-title"></h2><p id="playing-artist"></p></div>
+<div class="controls"><button id="play-pause">Pause</button><button id="stop-music" class="outlined">Stop</button></div>
+<label for="track-seek">Position <output id="track-time">0:00</output></label><input id="track-seek" type="range" min="0" max="1" step="0.1" value="0">
+<label for="track-volume">Volume</label><input id="track-volume" type="range" min="0" max="100" value="70">
+</section>
+<footer><button id="about-open" class="text-button">About kYuutube</button></footer>
+</main>
+<dialog id="about-dialog" aria-labelledby="about-heading">
+<h2 id="about-heading">kYuutube</h2>
+<p>An independent YouTube Music client in development.</p>
+<p>Not affiliated with Google or YouTube.</p>
+<div class="account-actions"><a href="diagnostics.html">Audio diagnostics</a><button id="about-close">Close</button></div>
+</dialog>
+</body></html>
